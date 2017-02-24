@@ -6,10 +6,48 @@
       >
     <h:head>
         <title>Library Management Login</title>
-        
+        <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+        <h:dataTable value="#{bookBean.books}" var="book" styleClass="table" >
+            <h:column>
+                <f:facet name="header">ISBN Code</f:facet>
+                #{book.ISBN}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Title</f:facet>
+                #{book.TITLE}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Description</f:facet>
+                #{book.DESCRIPTION}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Sub category</f:facet>
+                #{book.SUBCATEGORYID}
+            </h:column>
+            <h:column>
+                <f:facet name="header">NuMber of Copies</f:facet>
+                #{book.NUMBEROFCOPIES}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Loan Count</f:facet>
+                #{book.LOANCOUNT}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Available</f:facet>
+                #{book.HOLDFLAG}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Edition Nr.</f:facet>
+                #{book.EDIOTIONNO}
+            </h:column>
+            
+        </h:dataTable>
         
+        <!-- Including javascript and jquery -->
+        <h:outputScript library="js" name="bootstrap.js" />
+        <h:outputScript library="js" name="jquery-3.1.1.min.js" target="head" />
     </h:body>
 </html>
 
