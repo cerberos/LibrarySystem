@@ -27,11 +27,12 @@ public class BookBean {
     
     public ResultSet getBooks() throws SQLException {
         String sql = "select * from books";
-        CachedRowSet rs= null;
-        try (Connection conn = dataSource.getConnection();
-                //Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","CpXmax9w");
+        
+        try (//Connection conn = dataSource.getConnection();
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","CpXmax9w");
                 PreparedStatement st = conn.prepareStatement(sql)) {
-            rs = new com.sun.rowset.CachedRowSetImpl();
+            
+            CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
             rs.populate(st.executeQuery());
             return rs;
         } 

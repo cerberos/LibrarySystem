@@ -9,7 +9,7 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-        <h:dataTable value="#{bookBean.books}" var="book" styleClass="table" >
+        <h:dataTable value="#{bookBean.books}" var="book" styleClass="table table-striped" >
             <h:column>
                 <f:facet name="header">ISBN Code</f:facet>
                 #{book.ISBN}
@@ -29,10 +29,6 @@
             <h:column>
                 <f:facet name="header">NuMber of Copies</f:facet>
                 #{book.NUMBEROFCOPIES}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Loan Count</f:facet>
-                #{book.LOANCOUNT}
             </h:column>
             <h:column>
                 <f:facet name="header">Available</f:facet>
