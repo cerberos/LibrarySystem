@@ -29,10 +29,9 @@ public class BookBean {
         String sql = "select * from books";
         
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root","123456");
-                PreparedStatement st = conn.prepareStatement(sql);
-                CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl()) {
+                PreparedStatement st = conn.prepareStatement(sql)) {
             
-            
+            CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
             rs.populate(st.executeQuery());
             return rs;
         } 
