@@ -9,6 +9,9 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+        #{logedInUser}
+        <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+        
         <h:dataTable value="#{bookBean.books}" var="book" styleClass="table table-striped" >
             <h:column>
                 <f:facet name="header">ISBN Code</f:facet>
