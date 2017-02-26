@@ -22,7 +22,7 @@ public class Database {
     
     String connPath = "jdbc:mysql://localhost:3306/library";
     String user = "root";
-    String pass = "CpXmax9w";
+    String pass = "";
     
     public Database(String sql) throws SQLException{
         connect();
