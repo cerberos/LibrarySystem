@@ -5,14 +5,10 @@
  */
 package al.edu.unyt.eliomartin.library;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import al.edu.unyt.eliomartin.library.databaseconnection.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
-import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 
 /**
@@ -21,6 +17,21 @@ import javax.sql.rowset.CachedRowSet;
  */
 @ManagedBean(name="bookBean")
 public class BookBean {
-
     
+    Database db = null;
+    CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
+    
+    public BookBean() throws SQLException{
+        try{
+            db = new Database("select * from books;");
+            rs.populate( db.getResults(db.getSt()) );
+        } finally {
+            if (db != null)
+            db.close();
+        }
+    }
+    
+    public ResultSet getBooks(){
+        return rs;
+    }
 }

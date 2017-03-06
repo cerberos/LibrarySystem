@@ -47,7 +47,7 @@ public class LogedInUser implements Serializable {
     public void isLogin() throws IOException {
         if (!this.isLogin) {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/test.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/main.xhtml");
         }
     }
     
