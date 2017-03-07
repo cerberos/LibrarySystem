@@ -20,17 +20,22 @@ public class Database {
     Connection conn = null;
     PreparedStatement st = null;
     
+    
     String connPath = "jdbc:mysql://localhost:3306/library";
     String user = "root";
     String pass = "";
     
-    public Database(String sql) throws SQLException{
+    public Database(String sql) throws SQLException, ClassNotFoundException{
+        
         connect();
         this.st = conn.prepareStatement(sql);
+        
     }
     
-    private void connect() throws SQLException {
+    private void connect() throws SQLException, ClassNotFoundException{
+        Class.forName("com.mysql.jdbc.Driver");
         this.conn = DriverManager.getConnection(connPath, user, pass);
+        
     }
 
     public PreparedStatement getSt() {

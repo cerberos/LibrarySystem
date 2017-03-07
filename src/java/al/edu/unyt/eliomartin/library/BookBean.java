@@ -6,32 +6,81 @@
 package al.edu.unyt.eliomartin.library;
 
 import al.edu.unyt.eliomartin.library.databaseconnection.Database;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
 import javax.sql.rowset.CachedRowSet;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 /**
  *
  * @author Coding
+ *
  */
-@ManagedBean(name="bookBean")
-public class BookBean {
+
+ @Named("bookBean")
+ @ManagedBean
+ @SessionScoped
+public class BookBean implements Serializable{
     
-    Database db = null;
-    CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
+    private ArrayList<Book> bookList= new ArrayList();
+
+     public BookBean() throws SQLException{
+       
+    }
+     
     
-    public BookBean() throws SQLException{
-        try{
-            db = new Database("select * from books;");
-            rs.populate( db.getResults(db.getSt()) );
-        } finally {
+     Database db = null;
+     //CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
+     ResultSet rs;
+    public ArrayList<Book> getBookList() throws SQLException, ClassNotFoundException
+    {
+         try
+        {
+            db = new Database("select * from books");
+            rs= db.getResults(db.getSt()) ;
+            while(rs.next())
+            {
+                Book b=new Book(rs.getString("isbn"),rs.getString("title"),rs.getString("description"),rs.getInt("subcategoryid"),rs.getString("holdflag"),rs.getInt("numberofcopies"),rs.getInt("editionno"));
+                bookList.add(b);            
+            }
+            return bookList;
+        } 
+         finally 
+         {
             if (db != null)
             db.close();
+        }     
+    }
+     
+    public String[] getTitles() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> a=new ArrayList();
+        ArrayList<Book> books=this.getBookList();
+        for(Book b: books)
+        {
+            a.add(b.getTitle());
         }
+        
+        return a.toArray(new String[a.size()]);
     }
     
-    public ResultSet getBooks(){
-        return rs;
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException
+    {
+        BookBean b= new BookBean();
+        
+        //ArrayList<Book> b1=b.getBookList();
+        
+        for(String b3:b.getTitles())
+        {
+        System.out.println(b3);
+        }      
     }
 }
