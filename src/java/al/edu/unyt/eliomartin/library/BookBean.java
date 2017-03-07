@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
-import javax.sql.rowset.CachedRowSet;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import java.io.Serializable;
 
 /**
  *
@@ -33,12 +29,10 @@ public class BookBean implements Serializable{
 
      public BookBean() throws SQLException{
        
-    }
-     
-    
+    }    
      Database db = null;
-     //CachedRowSet rs = new com.sun.rowset.CachedRowSetImpl();
      ResultSet rs;
+     
     public ArrayList<Book> getBookList() throws SQLException, ClassNotFoundException
     {
          try

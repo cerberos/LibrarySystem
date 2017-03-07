@@ -18,7 +18,6 @@ import java.io.Serializable;
  */
 @Named( "book" )
 	
-
 @ManagedBean
 @SessionScoped
 public class Book implements Serializable{
