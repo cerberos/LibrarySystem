@@ -35,10 +35,11 @@ public class BookBean implements Serializable{
      
     public ArrayList<Book> getBookList() throws SQLException, ClassNotFoundException
     {
+        bookList.clear();
          try
         {
             db = new Database("select * from books");
-            rs= db.getResults(db.getSt()) ;
+            rs= db.getSelect() ;
             while(rs.next())
             {
                 Book b=new Book(rs.getString("isbn"),rs.getString("title"),rs.getString("description"),rs.getInt("subcategoryid"),rs.getString("holdflag"),rs.getInt("numberofcopies"),rs.getInt("editionno"));

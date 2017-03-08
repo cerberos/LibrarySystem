@@ -40,15 +40,20 @@ public class LogedInUser implements Serializable {
     
     public String tryLogin() throws SQLException{
         if(this.isLogin)
-            return "main";
+            return "index";
         return null;
     }
 
     public void isLogin() throws IOException {
         if (!this.isLogin) {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/main.xhtml");
+        ec.redirect(ec.getRequestContextPath() + "/test.xhtml");
         }
+        else {
+             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(ec.getRequestContextPath());
+        }
+            
     }
     
     private void login(int userid, String password) throws SQLException{
@@ -62,7 +67,7 @@ public class LogedInUser implements Serializable {
         PreparedStatement st = db.getSt();
         st.setInt(1, userid);
         st.setString(2, password);
-        rs = db.getResults(st);
+        rs = db.getSelect();
         
         if (rs.next()){
             this.isLogin = true;
@@ -73,7 +78,7 @@ public class LogedInUser implements Serializable {
             db= new Database(sql2);
             st = db.getSt();
             st.setInt(1, this.userID);
-            rs = db.getResults(st);
+            rs = db.getSelect();
             
             if (rs.next()){
                 this.name = rs.getString("Name");
@@ -96,8 +101,8 @@ public class LogedInUser implements Serializable {
         return loginid;
     }
 
-    public void setLoginid(String loginid) {
-        this.loginid = Integer.parseInt(loginid);
+    public void setLoginid(int loginid) {
+        this.loginid = loginid;
     }
 
     public String getLoginpass() {

@@ -19,7 +19,6 @@ public class Database {
     Connection conn = null;
     PreparedStatement st = null;
     
-    
     String connPath = "jdbc:mysql://localhost:3306/library";
     String user = "root";
     String pass = "";
@@ -32,7 +31,7 @@ public class Database {
     }
     
     private void connect() throws SQLException, ClassNotFoundException{
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver"); //This way the connection with the database always works
         this.conn = DriverManager.getConnection(connPath, user, pass);
         
     }
@@ -41,8 +40,17 @@ public class Database {
         return st;
     }
     
-    public ResultSet getResults (PreparedStatement st) throws SQLException{
+    public ResultSet getSelect () throws SQLException{
         return st.executeQuery();
+    }
+    
+    public Boolean update() throws SQLException
+    {
+        if(st.executeUpdate()==0)
+            return false;
+        else
+            return true;
+            
     }
     
     public void close()  throws SQLException{
