@@ -15,6 +15,10 @@ public class Logins {
     private int userTypeCode;
     private int active;
     
+    public Logins(){
+        
+    }
+    
     public Logins(int userID, String email, int utc, int active){
         this.setUserID(userID);
         this.setEmail(email);

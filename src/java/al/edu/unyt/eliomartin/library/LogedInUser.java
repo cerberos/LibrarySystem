@@ -43,7 +43,7 @@ public class LogedInUser implements Serializable {
         if (!this.isLogin) {
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/test.xhtml");
+                ec.redirect(ec.getRequestContextPath() + "/login.xhtml");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.err.print(e.hashCode());

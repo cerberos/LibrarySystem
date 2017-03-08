@@ -19,6 +19,10 @@ public class Users {
     private Date birthDate;
     private String gender;
     
+     public Users(){
+        
+    }
+    
     public Users(String name, String surname, String address, 
             String phone, Date birthDate, String gender){
         this.setName(name);
