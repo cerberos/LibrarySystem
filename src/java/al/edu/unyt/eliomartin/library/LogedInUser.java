@@ -24,15 +24,10 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name="logedInUser")
 @SessionScoped
 public class LogedInUser implements Serializable {
-    int userID;
-    int userTypeCode;
-    String email;
-    String name;
-    String surname;
-    String address;
-    String phone;
-    Date birthdate;
-    String gender;
+    
+    Logins login;
+    Users user;
+    
     boolean isLogin=false;
     
     int loginid;
@@ -46,12 +41,22 @@ public class LogedInUser implements Serializable {
 
     public void isLogin() throws IOException {
         if (!this.isLogin) {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath() + "/test.xhtml");
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/test.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
         }
         else {
-             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.redirect(ec.getRequestContextPath());
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath());
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
         }
             
     }
@@ -70,24 +75,20 @@ public class LogedInUser implements Serializable {
         rs = db.getSelect();
         
         if (rs.next()){
+            this.login = new Logins(rs.getInt("UserID"), rs.getString("Email"), 
+                    rs.getInt("UserTypeCode"), rs.getInt("active"));
             this.isLogin = true;
-            this.userID = rs.getInt("UserID");
-            this.email = rs.getString("Email");
-            this.userTypeCode = rs.getInt("UserTypeCode");
             
             db= new Database(sql2);
             st = db.getSt();
-            st.setInt(1, this.userID);
+            st.setInt(1, this.login.getUserID());
             rs = db.getSelect();
             
-            if (rs.next()){
-                this.name = rs.getString("Name");
-                this.surname = rs.getString("Surname");
-                this.address = rs.getString("Address");
-                this.phone = rs.getString("Phone");
-                this.birthdate = (Date)rs.getDate("Birday");
-                this.gender = rs.getString("Gender");
-            }
+            if (rs.next())
+                this.user = new Users(rs.getString("Name"),rs.getString("Surname"),
+                        rs.getString("Address"),rs.getString("Phone"),rs.getDate("Birday"),
+                        rs.getString("Gender"));
+
         }
         } catch (Exception e){
             System.err.print(e.hashCode());
@@ -96,6 +97,18 @@ public class LogedInUser implements Serializable {
             if (db!=null) db.close();
         }
     }
+    
+    
+//    public void isActive(){
+//    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+//        try {
+//            ec.redirect(ec.getRequestContextPath()
+//                    + "example.xhtml");
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            System.err.print(e.hashCode());
+//        }
+//    }
 
     public int getLoginid() {
         return loginid;

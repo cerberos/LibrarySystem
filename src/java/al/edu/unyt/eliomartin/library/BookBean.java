@@ -76,6 +76,6 @@ public class BookBean implements Serializable{
         for(String b3:b.getTitles())
         {
         System.out.println(b3);
-        }      
+        }
     }
 }
