@@ -29,13 +29,14 @@ public class AdminBean {
     String password;
     String bookCategoryName;   //This is used to create new category
     String bookCategoryName1; //This is used for the listing the categories
-
     String bookSubcategoryName;
 
     Database db = null;
     ResultSet rs= null;
 
+    Book book;
 
+   
 
     
     public AdminBean()
@@ -43,17 +44,37 @@ public class AdminBean {
       
     }
     
+    public void insertBook() throws SQLException, ClassNotFoundException
+    {
+        db=new Database("INSERT INTO books (ISBN, Title, Description, SubcategoryID, NumberOfCopies, HoldFlag, EditionNo) VALUES (?, ?, ?, ?, ? , ?, ?)");
+        //book=new Book();
+        book.setSubcategoryID(Integer.parseInt(bookSubcategoryName.substring(2, bookCategoryName1.indexOf(":")).replaceAll("\\s","")));    
+        db.getSt().setString(1, book.getIsbn());
+        db.getSt().setString(2, book.getTitle());
+        db.getSt().setString(3, book.getDescription());
+        db.getSt().setInt(4, book.getSubcategoryID());
+        db.getSt().setInt(5, book.getNumberOfCopies());
+        db.getSt().setString(6, book.getHoldFlag());
+        db.getSt().setInt(7, book.getEditionNo());
+        
+        if(db.update())
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book was succesfully inserted!"));
+        else
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book insertion failed!"));   
+        db.close();
+        
+        
+    }
+    
     public void createBookSubcategory() throws SQLException, ClassNotFoundException
     {
-//        bookCategoryName1="ID 2 :";
-//        bookSubcategoryName="lalala";
-        int categoryid=Integer.parseInt(bookCategoryName1.substring(2, bookCategoryName1.indexOf(":")).replaceAll("\\s",""));
         
-       
+        int categoryid=Integer.parseInt(bookCategoryName1.substring(2, bookCategoryName1.indexOf(":")).replaceAll("\\s",""));    
+ 
         db=new Database("Insert into subcategories (name, categoryid) values (?, ?)");
         db.getSt().setString(1, this.bookSubcategoryName);
         db.getSt().setInt(2, categoryid);
-        
+      
         if(db.update())
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subategory was created succesfully!"));
         else
@@ -83,10 +104,26 @@ public class AdminBean {
         return bookCategories;       
     }
     
+    public ArrayList<String> getBookSubcategories() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> bookSubcategories=new ArrayList();
+      
+        db=new Database("Select subcategoryID, name from subcategories");
+        rs=db.getSelect();
+        while(rs.next())
+        {
+//            ids.add(rs.getInt("categoryid"));
+//            names.add(rs.getString("name"));
+              bookSubcategories.add("ID "+rs.getInt("subcategoryid")+" : "+rs.getString("name"));
+        }
+        rs.close();
+        db.close();
+        return bookSubcategories;       
+    }
     
     
     
-        public void createBookCategory() throws SQLException, ClassNotFoundException
+    public void createBookCategory() throws SQLException, ClassNotFoundException
     {
         db=new Database("Insert into categories (name) values (?)");
         db.getSt().setString(1, bookCategoryName);
@@ -129,7 +166,8 @@ public class AdminBean {
         return emails;      
     }
     
-         public void createInstructor() throws SQLException, ClassNotFoundException
+    
+    public void createInstructor() throws SQLException, ClassNotFoundException
          {
              String email=this.getEmail();
              String password=this.getPassword();
@@ -145,7 +183,7 @@ public class AdminBean {
              db.close();
          }
          
-         public void createLibrarian() throws SQLException, ClassNotFoundException
+    public void createLibrarian() throws SQLException, ClassNotFoundException
          {
              String email=this.getEmail();
              String password=this.getPassword();
@@ -177,7 +215,7 @@ public class AdminBean {
         this.email = email;
     }
     
-        public String getBookCategoryName() {
+    public String getBookCategoryName() {
         return bookCategoryName;
     }
 
@@ -194,7 +232,7 @@ public class AdminBean {
         this.bookSubcategoryName = bookSubcategoryName;
     }
     
-        public String getBookCategoryName1() {
+    public String getBookCategoryName1() {
         return bookCategoryName1;
     }
 
@@ -202,7 +240,15 @@ public class AdminBean {
         this.bookCategoryName1 = bookCategoryName1;
     }
     
-      public static void main(String[] args) throws SQLException, ClassNotFoundException
+     public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+    
+    public static void main(String[] args) throws SQLException, ClassNotFoundException
     {
         AdminBean b= new AdminBean();
        

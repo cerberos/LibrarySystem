@@ -21,7 +21,7 @@
                 </h:selectOneMenu>
                 <h:message id="kot1" for="" styleClass="error"/>
                 <h:outputText value="Password:" />
-                <h:inputSecret id="inputLibrarianPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password"/>               
+                <h:inputSecret id="inputLibrarianPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password!"/>               
                 <h:message id="inputLibrarianPasswordMessage" for="inputLibrarianPassword" styleClass="error"/> 
         </h:panelGrid> 
         <p/>
@@ -38,7 +38,7 @@
                 </h:selectOneMenu>
                 <h:message id="kot2" for="" styleClass="error"/>
                 <h:outputText value="Password:" />
-                <h:inputSecret id="inputInstructorPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password"/>
+                <h:inputSecret id="inputInstructorPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password!"/>
                 <h:message id="inputInstructorPasswordMessage" for="inputInstructorPassword" styleClass="error"/>
         </h:panelGrid>  
         <p/>
@@ -50,7 +50,7 @@
         <h:messages id="categoryCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
                 <h:outputText value="Book Category Name:" />
-                <h:inputText id="inputCategoryName" value="#{adminBean.bookCategoryName}" required="true" requiredMessage="Please enter a name for the book category"/>
+                <h:inputText id="inputCategoryName" value="#{adminBean.bookCategoryName}" required="true" requiredMessage="Please enter a name for the book category!"/>
                 <h:message id="inputCategoryNameMessage" for="inputCategoryName" styleClass="error"/>
         </h:panelGrid>    
         <p/>
@@ -64,7 +64,7 @@
         <h:panelGrid columns="3">
             
                 <h:outputText value="Book Subategory Name:" />
-                <h:inputText id="inputSubcategoryName" value="#{adminBean.bookSubcategoryName}" required="true" requiredMessage="Please enter a name for the book subcategory"/>
+                <h:inputText id="inputSubcategoryName" value="#{adminBean.bookSubcategoryName}" required="true" requiredMessage="Please enter a name for the book subcategory!"/>
                 <h:message id="inputSubcategoryNameMessage" for="inputSubcategoryName" styleClass="error"/>      
                 <h:outputText value="Select belonging category:" />
                 <h:selectOneMenu id="selectBelongingCategory" value="#{adminBean.bookCategoryName1}">               
@@ -74,16 +74,55 @@
                 
         </h:panelGrid>     
         <p/>
-        <h:commandButton value="Create Subcategory" action="#{adminBean.createBookCategory}">
+        <h:commandButton value="Create Subcategory" action="#{adminBean.createBookSubcategory}">
              <f:ajax execute="inputSubcategoryName selectBelongingCategory" render="subcategoryCreationStatus inputSubcategoryNameMessage inputSubcategoryName selectBelongingCategory"/>
         </h:commandButton>
+        
         <h:commandButton value="Refresh Book Categories List">
              <f:ajax execute="selectBelongingCategory" render="selectBelongingCategory"/>
         </h:commandButton>
-        
-        
-        
-        
+       
+        <h2>Create Book</h2>
+        <h:messages id="bookCreationStatus" styleClass="error"/>
+        <h:panelGrid columns="3">         
+               <h:outputText value="ISBN: " />
+               <h:inputText id="inputISBN" value="#{adminBean.book.isbn}" required="true" requiredMessage="Please insert an ISBN for the book!"/>
+               <h:message id="inpuISBNMessage" for="inputISBN" styleClass="error"/>
+               
+               <h:outputText value="Title: " />
+               <h:inputText id="inputTitle" value="#{adminBean.book.title}" required="true" requiredMessage="Please insert a title for the book!"/>
+               <h:message id="inputTitleMessage" for="inputTitle" styleClass="error"/>
+               
+               <h:outputText value="Description: " />
+               <h:inputText id="inputDescription" value="#{adminBean.book.description}" required="true" requiredMessage="Please insert a Description for the book!"/>
+               <h:message id="inputDescriptionMessage" for="inputDescription" styleClass="error"/>
+               
+                <h:outputText value="Book Subcategory: " />
+                <h:selectOneMenu id="selectBelongingSubcategory" value="#{adminBean.bookSubcategoryName}">               
+                    <f:selectItems value="#{adminBean.bookSubcategories}"/>
+                </h:selectOneMenu>
+                <h:message id="kot4" for="" styleClass="error"/>
+                
+                <h:outputText value="Hold Flag: " />
+                <h:selectOneMenu id="selectHoldFlag" value="#{adminBean.book.holdFlag}">               
+                    <f:selectItem itemValue="f" itemLabel="False"  />
+                    <f:selectItem itemValue="t" itemLabel="True"  />
+                </h:selectOneMenu>
+                <h:message id="kot5" for="" styleClass="error"/>
+
+               <h:outputText value="Number of Copies: " />
+               <h:inputText id="inputNumberOfCopies" value="#{adminBean.book.numberOfCopies}" required="true" requiredMessage="Please insert the number of copies!"/>
+               <h:message id="inputNumberOfCopiesMessage" for="inputNumberOfCopies" styleClass="error"/>
+               
+               <h:outputText value="Edition No: " />
+               <h:inputText id="inputEditionNo" value="#{adminBean.book.editionNo}" required="true" requiredMessage="Please insert the ediotion no.!"/>
+               <h:message id="inputEditionNoMessage" for="inputEditioNo" styleClass="error"/>           
+        </h:panelGrid>     
+        <p/>
+        <h:commandButton value="Insert Book" action="#{adminBean.insertBook}">
+             <f:ajax execute="inputISBN inputTitle inputDescription selectBelongingSubcategory selectHoldFlag inputNumberOfCopies inputEditionNo" render=
+                     "bookCreationStatus selectBelongingCategory inpuISBNMessage inputDescriptionMessage inputTitleMessage"/>
+        </h:commandButton>
         </h:form>
          
         

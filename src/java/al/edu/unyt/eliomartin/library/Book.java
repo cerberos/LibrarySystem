@@ -93,7 +93,7 @@ public class Book implements Serializable{
         this.subcategoryID = subcategoryID;
     }
 
-    public String isHoldFlag() {
+    public String getHoldFlag() {
         return holdFlag;
     }
 

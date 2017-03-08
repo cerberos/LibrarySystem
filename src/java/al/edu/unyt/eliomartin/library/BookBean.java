@@ -66,16 +66,4 @@ public class BookBean implements Serializable{
         return a.toArray(new String[a.size()]);
     }
     
-
-    public static void main(String[] args) throws SQLException, ClassNotFoundException
-    {
-        BookBean b= new BookBean();
-        
-        //ArrayList<Book> b1=b.getBookList();
-        
-        for(String b3:b.getTitles())
-        {
-        System.out.println(b3);
-        }      
-    }
 }
