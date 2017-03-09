@@ -26,57 +26,66 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class LogedInUser implements Serializable {
     
-    Login login= new Login();
-    User user= new User();
+    private Login login= new Login();
+    private User user= new User();
+    private String newPasswd;
+    private Boolean isLogin=false;
+ 
+    private int loginid;
+    private String loginpass;
     
-    boolean isLogin=false;
-    
-    int loginid;
-    String loginpass;
-    
-    public String tryLogin() throws SQLException{
-        if(this.isLogin)
-            return "index";
-        return null;
-    }
     
     public Boolean loginValidation() throws SQLException, ClassNotFoundException
     {
-        Database db=new Database("select * from logins where email=? and password=?");
+        
+        Database db=new Database("select * from logins where userid=? and password=?");
+        db.getSt().setInt(1, this.loginid);
+        db.getSt().setString(2, this.loginpass);
         ResultSet rs=db.getSelect();
         if(rs.next())
         {
             
             login= new Login();
-            login.setUserID(rs.getInt("userid"));
+            login.setUserID(loginid);
             login.setEmail(rs.getString("email"));
             login.setActive(rs.getInt("active"));       
             login.setUserTypeCode(rs.getInt("UserTypeCode"));
+            isLogin=true;
             db.close();
             rs.close();
             if(login.getActive()==1)
             {
-            db=new Database("select * from users where userid=?");
-            db.getSt().setInt(1, login.getUserID());
-            rs=db.getSelect();
-            user.setAddress(rs.getString("address"));
-            user.setBirthDate(rs.getDate("birthdate"));
-            user.setGender(rs.getString("gender"));
-            user.setName(rs.getString("name"));
-            user.setPhone(rs.getString("telephone"));
-            user.setSurname(rs.getString("surname"));
-            return true;
+                db=new Database("select * from users where userid=?");
+                db.getSt().setInt(1, login.getUserID());
+                rs=db.getSelect();
+                if(rs.next()){
+                
+                user.setAddress(rs.getString("address"));
+                user.setBirthDate(rs.getDate("birthdate"));
+                user.setGender(rs.getString("gender"));
+                user.setName(rs.getString("name"));
+                user.setPhone(rs.getString("phone"));
+                user.setSurname(rs.getString("surname"));
+            
+                return true;
+                }
+                return true;
             }
             else
             {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your account requires activation!"));
+                isLogin=false;
                 return false;
             }
             
         }
             
         else
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Wrong username or password!"));
+            isLogin=false;
             return false;
+        }
     }
     
     public String loginCheck() throws SQLException, ClassNotFoundException
@@ -96,21 +105,24 @@ public class LogedInUser implements Serializable {
         return null;
             
     }
+    
+    public void changePasswd() throws SQLException, ClassNotFoundException
+    {
+       Database db=new Database("UPDATE logins SET password=? where userid=?");
+       db.getSt().setString(1, newPasswd);
+       db.getSt().setInt(2, loginid);
+       
+       if(db.update())
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changed succesfully!"));
+       else
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password changing failed!"));
+    }
 
     public void isLogin() throws IOException {
         if (!this.isLogin) {
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/login.xhtml");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                System.err.print(e.hashCode());
-            }
-        }
-        else {
-            try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath());
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.err.print(e.hashCode());
@@ -168,6 +180,29 @@ public class LogedInUser implements Serializable {
 //        }
 //    }
 
+    public Login getLogin() {
+        return login;
+    }
+    
+    public String getNewPasswd() {
+        return newPasswd;
+    }
+
+    public void setNewPasswd(String newPasswd) {
+        this.newPasswd = newPasswd;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     public int getLoginid() {
         return loginid;
     }
@@ -184,6 +219,15 @@ public class LogedInUser implements Serializable {
         this.loginpass = loginpass;
     }
     
+    public Boolean getIsLogin() {
+        return isLogin;
+    }
+
+    public void setIsLogin(Boolean isLogin) {
+        this.isLogin = isLogin;
+    }
     
+
+     
     
 }

@@ -10,16 +10,22 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.SQLException;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author Coding
  */
 @ManagedBean(name="firstUpdateInfoBean")
+@ViewScoped
 public class FirstUpdateInfoBean implements Serializable {
     private String password;
     private User user = new User();
+    
+    @ManagedProperty(value="#{logedInUser.login.userID}")
     private int userid;
+    
     private String text ="";
     
     public void submit() throws SQLException, ClassNotFoundException{
@@ -39,18 +45,12 @@ public class FirstUpdateInfoBean implements Serializable {
             db.getSt().setDate(6, birth);
             db.getSt().setString(7, user.getGender());
             if(db.update()){
-                    text = "Password: " + password + "<br/>";
-                    text+= "Name: " + user.getName() + "<br/>";
-                    text+= "Surname: " + user.getSurname() + "<br/>";
-                    text+= "Address: " + user.getAddress() + "<br/>";
-                    text+= "Phone nr.: " + user.getPhone() + "<br/>";
-                    text+= "Birth Date: " + user.getBirthDate() + "<br/>";
-                    text+= "Gender: " + user.getGender() + "<br/>";
+                    text="Congratulations! Your informations was updated successfully.<br/>";
             } else {
                 text = "User exist.";
             }
         } else {
-            text = "This user do not exist!";
+            text = "This user do not exist!<br/>";
         }
     }
 

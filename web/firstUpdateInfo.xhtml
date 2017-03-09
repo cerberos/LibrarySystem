@@ -7,13 +7,13 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>First Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
+        <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
          <h:form>
             <h:panelGrid columns="3">
             <h:outputLabel for="password" value="Password : " />
@@ -61,8 +61,9 @@ and open the template in the editor.
             <h:message for="phone" style="color: red;" />
             
             <h:outputLabel for="birthDate" value="Birth Date : " />
-            <h:inputText a:type="date"  id="birthDate" 
+            <h:inputText id="birthDate" 
                          value="#{firstUpdateInfoBean.user.birthDate}" >
+                <f:convertDateTime pattern = "dd-MM-yyyy" />
             </h:inputText>
             <h:message for="birthDate" style="color: red;" />
             
@@ -73,8 +74,13 @@ and open the template in the editor.
             </h:selectOneRadio>
             
             </h:panelGrid>
-            <h:commandButton  value="Submit" />
+             <h:commandButton  value="Submit" action="#{firstUpdateInfoBean.submit()}" >
+             </h:commandButton>
 
         </h:form>
+        
+        <h:outputText escape="false" value="#{firstUpdateInfoBean.text}" />
+        <h:outputLink value="index.xhtml">Go to index</h:outputLink>
+        
     </h:body>
 </html>
