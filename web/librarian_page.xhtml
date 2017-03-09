@@ -5,46 +5,49 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Administrator Page</title>
+        <title>Librarian Page</title>
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-        <h1>Welcome Administrator #{logedInUser.user.name} </h1>
+        <h1>Welcome Librarian #{logedInUser.user.name} </h1>
         <h:form>
-            
-        <h2>Create User</h2>
+        <h:outputLink value="view_profile.xhtml">View Profile</h:outputLink>
+        <p/>
+        
+        <h2>Create Instructor/Student</h2>
         <h:messages id="userCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
                 <h:outputText value="User Email: " />
-                <h:inputText id="userEmail" value="#{adminBean.email}" required="true" requiredMessage="Please enter an email!"/>
+                <h:inputText id="userEmail" value="#{librarianBean.email}" required="true" requiredMessage="Please enter an email!"/>
                 <h:message id="userEmailMessage" for="userEmail" styleClass="error"/>               
                 <h:outputText value="Password:" />
-                <h:inputSecret id="inputUserPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password!" validatorMessage="Password should be more than 5 characters">
+                <h:inputSecret id="inputUserPassword" value="#{librarianBean.password}" required="true" requiredMessage="Please enter a password!" validatorMessage="Password should be more than 5 characters">
                     <f:validateLength minimum="5"/>
                 </h:inputSecret>               
                 <h:message id="inputUserPasswordMessage" for="inputUserPassword" styleClass="error"/> 
-                <h:outputText value="User Type:" />
-                <h:selectOneMenu id="selectUserType" value="#{adminBean.userType}">               
-                    <f:selectItems value="#{adminBean.userTypes}"/>
-                </h:selectOneMenu>
+                
+               <h:outputText value="User Type:" />
+               <h:selectOneMenu id="selectUserType" value="#{librarianBean.userType}">               
+                    <f:selectItems value="#{LibrarianBean.userTypes}"/>
+               </h:selectOneMenu>
                 <h:message id="kot11" for="" styleClass="error"/>
+                
         </h:panelGrid> 
         <p/>
-        <h:commandButton value="Create User" action="#{adminBean.createUser()}">
+        
+        <h:commandButton value="Create User" action="#{librarianBean.createUser()}">
              <f:ajax execute="inputUserPassword selectUserType userEmail" render="inputUserPassword selectUserType inputUserPasswordMessage userEmailMessage userCreationStatus"/>
         </h:commandButton>
-       
-        
-        
+                 
         <h2>Create Book Category</h2>
         <h:messages id="categoryCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
                 <h:outputText value="Book Category Name:" />
-                <h:inputText id="inputCategoryName" value="#{adminBean.bookCategoryName}" required="true" requiredMessage="Please enter a name for the book category!"/>
+                <h:inputText id="inputCategoryName" value="#{librarianBean.bookCategoryName}" required="true" requiredMessage="Please enter a name for the book category!"/>
                 <h:message id="inputCategoryNameMessage" for="inputCategoryName" styleClass="error"/>
         </h:panelGrid>    
         <p/>
-        <h:commandButton value="Create Category" action="#{adminBean.createBookCategory}">
+        <h:commandButton value="Create Category" action="#{librarianBean.createBookCategory}">
              <f:ajax execute="inputCategoryName" render="inputCategoryNameMessage categoryCreationStatus inputCategoryName"/>
         </h:commandButton>
         
@@ -54,17 +57,17 @@
         <h:panelGrid columns="3">
             
                 <h:outputText value="Book Subategory Name:" />
-                <h:inputText id="inputSubcategoryName" value="#{adminBean.bookSubcategoryName}" required="true" requiredMessage="Please enter a name for the book subcategory!"/>
+                <h:inputText id="inputSubcategoryName" value="#{librarianBean.bookSubcategoryName}" required="true" requiredMessage="Please enter a name for the book subcategory!"/>
                 <h:message id="inputSubcategoryNameMessage" for="inputSubcategoryName" styleClass="error"/>      
                 <h:outputText value="Select belonging category:" />
-                <h:selectOneMenu id="selectBelongingCategory" value="#{adminBean.bookCategoryName1}">               
+                <h:selectOneMenu id="selectBelongingCategory" value="#{librarianBean.bookCategoryName1}">               
                     <f:selectItems value="#{adminBean.bookCategories}"/>
                 </h:selectOneMenu>
                 <h:message id="kot3" for="" styleClass="error"/>   
                 
         </h:panelGrid>     
         <p/>
-        <h:commandButton value="Create Subcategory" action="#{adminBean.createBookSubcategory}">
+        <h:commandButton value="Create Subcategory" action="#{librarianBean.createBookSubcategory}">
              <f:ajax execute="inputSubcategoryName selectBelongingCategory" render="subcategoryCreationStatus inputSubcategoryNameMessage inputSubcategoryName selectBelongingCategory"/>
         </h:commandButton>
         
@@ -76,43 +79,43 @@
         <h:messages id="bookCreationStatus" styleClass="error"/>
         <h:panelGrid columns="3">         
                <h:outputText value="ISBN: " />
-               <h:inputText id="inputISBN" value="#{adminBean.book.isbn}" required="true" requiredMessage="Please insert an ISBN for the book!"/>
+               <h:inputText id="inputISBN" value="#{librarianBean.book.isbn}" required="true" requiredMessage="Please insert an ISBN for the book!"/>
                <h:message id="inpuISBNMessage" for="inputISBN" styleClass="error"/>
                
                <h:outputText value="Title: " />
-               <h:inputText id="inputTitle" value="#{adminBean.book.title}" required="true" requiredMessage="Please insert a title for the book!"/>
+               <h:inputText id="inputTitle" value="#{librarianBean.book.title}" required="true" requiredMessage="Please insert a title for the book!"/>
                <h:message id="inputTitleMessage" for="inputTitle" styleClass="error"/>
                
                <h:outputText value="Description: " />
-               <h:inputText id="inputDescription" value="#{adminBean.book.description}" required="true" requiredMessage="Please insert a Description for the book!"/>
+               <h:inputText id="inputDescription" value="#{librarianBean.book.description}" required="true" requiredMessage="Please insert a Description for the book!"/>
                <h:message id="inputDescriptionMessage" for="inputDescription" styleClass="error"/>
                
                 <h:outputText value="Book Subcategory: " />
-                <h:selectOneMenu id="selectBelongingSubcategory" value="#{adminBean.bookSubcategoryName}">               
-                    <f:selectItems value="#{adminBean.bookSubcategories}"/>
+                <h:selectOneMenu id="selectBelongingSubcategory" value="#{librarianBean.bookSubcategoryName}">               
+                    <f:selectItems value="#{librarianBean.bookSubcategories}"/>
                 </h:selectOneMenu>
                 <h:message id="kot4" for="" styleClass="error"/>
                 
                 <h:outputText value="Hold Flag: " />
-                <h:selectOneMenu id="selectHoldFlag" value="#{adminBean.book.holdFlag}">               
+                <h:selectOneMenu id="selectHoldFlag" value="#{librarianBean.book.holdFlag}">               
                     <f:selectItem itemValue="f" itemLabel="False"  />
                     <f:selectItem itemValue="t" itemLabel="True"  />
                 </h:selectOneMenu>
                 <h:message id="kot5" for="" styleClass="error"/>
 
                <h:outputText value="Number of Copies: " />
-               <h:inputText id="inputNumberOfCopies" value="#{adminBean.book.numberOfCopies}" required="true" requiredMessage="Please insert the number of copies!" validatorMessage="Only numbers here!">
+               <h:inputText id="inputNumberOfCopies" value="#{librarianBean.book.numberOfCopies}" required="true" requiredMessage="Please insert the number of copies!" validatorMessage="Only numbers here!">
                    
                </h:inputText>
                <h:message id="inputNumberOfCopiesMessage" for="inputNumberOfCopies" styleClass="error"/>
                
                <h:outputText value="Edition No: " />
-               <h:inputText id="inputEditionNo" value="#{adminBean.book.editionNo}" required="true" requiredMessage="Please insert the ediotion no!" />
+               <h:inputText id="inputEditionNo" value="#{librarianBean.book.editionNo}" required="true" requiredMessage="Please insert the ediotion no!" />
                <h:message id="inputEditionNoMessage" for="inputEditionNo" styleClass="error"/>  
                                   
         </h:panelGrid>     
         <p/>
-        <h:commandButton value="Insert Book" action="#{adminBean.insertBook}">
+        <h:commandButton value="Insert Book" action="#{librarianBean.insertBook}">
              <f:ajax execute="inputISBN inputTitle inputDescription selectBelongingSubcategory selectHoldFlag inputNumberOfCopies inputEditionNo" render=
                      "bookCreationStatus selectBelongingCategory inpuISBNMessage inputDescriptionMessage inputTitleMessage inputEditionNoMessage inputNumberOfCopiesMessage"/>
         </h:commandButton>
@@ -124,13 +127,13 @@
         <h:panelGrid columns="2">
             
                 <h:outputText value="Email that requires validation:" />      
-                <h:selectOneMenu id="selectEmailToValidate" value="#{adminBean.pendingRequestEmail}">               
-                    <f:selectItems value="#{adminBean.pendingRequests}"/>
+                <h:selectOneMenu id="selectEmailToValidate" value="#{librarianBean.pendingRequestEmail}">               
+                    <f:selectItems value="#{librarianBean.pendingRequests}"/>
                 </h:selectOneMenu> 
                 
         </h:panelGrid>     
         <p/>
-        <h:commandButton value="Validate Request" action="#{adminBean.validateRequest}">
+        <h:commandButton value="Validate Request" action="#{librarianBean.validateRequest}">
              <f:ajax execute="selectEmailToValidate" render="selectEmailToValidate requestValidationStatus "/>
         </h:commandButton>
         <p/>
@@ -157,6 +160,7 @@
              <f:ajax execute="newPassword repeatPassword" render="changePasswordStatus newPasswordMessage repeatPasswordMessage"/>
         </h:commandButton>
         <p/>
+        
         </h:form>
          
         

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Profile Page</title>
+        <h:outputStylesheet name="bootstrap.css" library="css"/>
+    </h:head>
+    <h:body>
+        <h1>Profile Page of  #{logedInUser.user.name} </h1>
+         <p/>
+        <h:form>    
+        <h2>Profile information: </h2>
+        <h:panelGrid columns="2">
+                
+                <h:outputText value="User ID:" />
+                <h:outputText id="userID" value="#{logedInUser.login.userID}" />               
+               
+            
+                <h:outputText value="User Type:" />
+                <h:outputText id="userTypeCode" value="#{logedInUser.login.userTypeCode}" />               
+
+                
+                <h:outputText value="Email:" />
+                <h:outputText id="userEmail" value="#{logedInUser.login.email}" />               
+   
+            
+                <h:outputText value="Name" />
+                <h:outputText id="userName" value="#{logedInUser.user.name}" />       
+                
+                <h:outputText value="Surname" />
+                <h:outputText id="userSurname" value="#{logedInUser.user.surname}"/>
+                
+                <h:outputText value="Address" />
+                <h:outputText id="userAddress" value="#{logedInUser.user.address}" />
+                               
+                <h:outputText value="Phone:" />
+                <h:outputText id="userPhone" value="#{logedInUser.user.phone}" />               
+                
+                <h:outputText value="Birth-date:" />
+                <h:outputText id="userBirthDate" value="#{logedInUser.user.birthDate}" />               
+                
+                <h:outputText value="Gender:" />
+                <h:outputText id="userGender" value="#{logedInUser.user.gender}" />                     
+        </h:panelGrid> 
+        <p/>
+
+        <h2>Update information: </h2>           
+        <h:messages id="userModificationStatus" styleClass="error" />
+        <h:panelGrid columns="3">                            
+                <h:outputText value="Name" />
+                <h:inputText id="userName1" value="#{logedInUser.user.name}" required="true" requiredMessage="Please enter an name!"/>
+                <h:message id="userNameMessage" for="userName1" styleClass="error"/>       
+                
+                <h:outputText value="Surname" />
+                <h:inputText id="userSurname1" value="#{logedInUser.user.surname}" required="true" requiredMessage="Please enter surname!"/>
+                <h:message id="userSurnameMessage" for="userSurame1" styleClass="error"/> 
+                
+                <h:outputText value="Address" />
+                <h:inputText id="userAddress1" value="#{logedInUser.user.address}" required="true" requiredMessage="Please enter address!"/>
+                <h:message id="userAddressMessage" for="userAddress1" styleClass="error"/>
+                               
+                <h:outputText value="Phone:" />
+                <h:inputText id="userPhone1" value="#{logedInUser.user.phone}" required="true" requiredMessage="Please enter phone!" />               
+                <h:message id="userPhoneMessage" for="userPhone1" styleClass="error"/> 
+                
+                <h:outputText value="Birth-date:" />
+                <h:inputText id="userBirthDate1" value="#{logedInUser.user.birthDate}" required="true" requiredMessage="Please enter birth date!" >               
+                <f:convertDateTime pattern = "dd-MM-yyyy" />              
+                </h:inputText> 
+                <h:message id="userBirthDateMessage" for="userBirthDate1" styleClass="error"/> 
+                
+                <h:outputText value="Gender:" />
+                <h:inputText id="userGender1" value="#{logedInUser.user.gender}" required="true" requiredMessage="Please enter birth gender!" />
+                <h:message id="userGenderMessage" for="userGender1" styleClass="error"/> 
+                
+                
+        </h:panelGrid> 
+        <h:commandButton value="Update" action="#{logedInUser.updateUserInformation}">
+             <f:ajax execute="userName1 userSurname1 userAddress1 userPhone1 userBirthDate1 userGender1" render="userNameMessage userSurnameMessage userAddressMessage
+                    userPhoneMessage userBirthDateMessage userGenderMessage userModificationStatus"/>
+        </h:commandButton>
+            
+        </h:form>
+         
+        
+    </h:body>
+</html>
+

@@ -47,7 +47,7 @@ public class AdminBean {
     {
         ArrayList<String> usertypes= new ArrayList();
         
-        db=new Database("Select * from user_types where userTypecode=1 OR userTypecode=2");
+        db=new Database("Select * from user_types");
         rs=db.getSelect();
         while(rs.next())
         { 
@@ -306,7 +306,8 @@ public class AdminBean {
     }
     public static void main(String[] args) throws SQLException, ClassNotFoundException
     {
-        
+        LibrarianBean a = new LibrarianBean();
+        System.out.println(a.getUserTypes().size());
        
             
     }

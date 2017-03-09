@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -35,7 +35,24 @@ public class LogedInUser implements Serializable {
     private String loginpass;
     
 
-    
+    public void updateUserInformation () throws SQLException, ClassNotFoundException
+    {
+        Date birth = new Date(user.getBirthDate().getTime());
+        Database db= new Database("UPDATE users SET Name=?, Surname=?, Address=?, Phone=? , BirthDate=?, Gender=? WHERE userid="+loginid);
+        db.getSt().setString(1, user.getName());
+        db.getSt().setString(2, user.getSurname());
+        db.getSt().setString(3, user.getAddress());
+        db.getSt().setString(4, user.getPhone());
+        db.getSt().setDate(5, birth);
+        db.getSt().setString(6, user.getGender());
+        
+        if(db.update())
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Information was updated succesfully!"));
+        else
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Information update failed!"));            
+        
+        db.close();
+    }
     public Boolean loginValidation() throws SQLException, ClassNotFoundException
     {
         
@@ -59,7 +76,8 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
-                rs.next();
+                if(rs.next())
+                {
                 
                 user.setAddress(rs.getString("address"));
                 user.setBirthDate(rs.getDate("birthdate"));
@@ -67,7 +85,8 @@ public class LogedInUser implements Serializable {
                 user.setName(rs.getString("name"));
                 user.setPhone(rs.getString("phone"));
                 user.setSurname(rs.getString("surname"));
-            
+                return true;
+                }
             return true;
             }
             else

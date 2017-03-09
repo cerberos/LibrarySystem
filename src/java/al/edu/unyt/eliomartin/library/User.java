@@ -5,7 +5,8 @@
  */
 package al.edu.unyt.eliomartin.library;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.Calendar;
 
 /**
  *
@@ -16,8 +17,8 @@ public class User {
     private String surname;
     private String address;
     private String phone;
-    private Date birthDate;
-    private String gender;
+    private Date birthDate =new Date(Calendar.getInstance().getTime().getTime());
+    private String gender="m";
     
     public User()
     {

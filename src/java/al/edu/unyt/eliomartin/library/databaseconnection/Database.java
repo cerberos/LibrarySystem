@@ -29,6 +29,10 @@ public class Database {
         this.st = conn.prepareStatement(sql);
         
     }
+
+    public Database() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private void connect() throws SQLException, ClassNotFoundException{
         Class.forName("com.mysql.jdbc.Driver"); //This way the connection with the database always works
