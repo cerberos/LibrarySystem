@@ -93,7 +93,7 @@ public class LogedInUser implements Serializable {
                 return "student_page"; 
         }
         
-        return "login";
+        return null;
             
     }
 
