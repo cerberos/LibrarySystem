@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>First Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+         <h:form>
+            <h:panelGrid columns="3">
+            <h:outputLabel for="password" value="Password : " />
+            <h:inputSecret id="password" value="#{firstUpdateInfoBean.password}" required="true"
+                    requiredMessage="Please enter password">
+                    <f:validator validatorId="passwordValidate" />
+                    <f:attribute name="confirmPassword" value="#{confirmPassword}" />
+            </h:inputSecret>
+            <h:message for="password" style="color: red;" />
+
+            <h:outputLabel for="confirmPassword" value="Confirm password : " />
+            <h:inputSecret id="confirmPassword" required="true"
+                    binding="#{confirmPassword}"
+                    requiredMessage="Please enter confirm password" />
+            <h:message for="confirmPassword" style="color: red;" />
+
+            
+            <h:outputLabel for="name" value="Name : " />
+            <h:inputText id="name" required="true"
+                         value="#{firstUpdateInfoBean.user.name}" 
+                         requiredMessage="Please enter your firest name">
+            </h:inputText>
+            <h:message for="name" style="color: red;" />
+            
+            
+            <h:outputLabel for="surname" value="Surname : " />
+            <h:inputText id="surname" required="true"
+                         value="#{firstUpdateInfoBean.user.surname}" 
+                         requiredMessage="Please enter your last name">
+            </h:inputText>
+            <h:message for="surname" style="color: red;" />
+            
+            <h:outputLabel for="address" value="Address : " />
+            <h:inputTextarea id="address" required="true"
+                         value="#{firstUpdateInfoBean.user.address}" 
+                         requiredMessage="Please enter your Address">
+            </h:inputTextarea>
+            <h:message for="address" style="color: red;" />
+            
+            <h:outputLabel for="phone" value="Phone nr. : " />
+            <h:inputText id="phone" required="true"
+                         value="#{firstUpdateInfoBean.user.phone}" 
+                         requiredMessage="Please enter your phone number">
+            </h:inputText>
+            <h:message for="phone" style="color: red;" />
+            
+            <h:outputLabel for="birthDate" value="Birth Date : " />
+            <h:inputText a:type="date"  id="birthDate" 
+                         value="#{firstUpdateInfoBean.user.birthDate}" >
+            </h:inputText>
+            <h:message for="birthDate" style="color: red;" />
+            
+            <h:outputLabel for="gender" value="Gender : " />
+            <h:selectOneRadio value="#{firstUpdateInfoBean.user.gender}">
+                <f:selectItem itemValue="m" itemLabel="Male" />
+                <f:selectItem itemValue="f" itemLabel="Female" />
+            </h:selectOneRadio>
+            
+            </h:panelGrid>
+            <h:commandButton  value="Submit" />
+
+        </h:form>
+    </h:body>
+</html>

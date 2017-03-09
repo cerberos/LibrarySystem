@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Apply for access</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+         <h:form>
+             <h3>Please insert your UNYT E-mail address and push the button to request for access.</h3>
+        <h:panelGrid columns="4">
+            <h:outputText value="Email" />
+                <h:inputText id="email" required="true" 
+                             value="#{applyAccessBean.email}"
+                             requiredMessage="Your E-mail is required!"
+                             validatorMessage="Invalid E-mail address format" >
+                             <f:validateRegex pattern="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
+                </h:inputText>
+            <h:commandButton value="Send Request" action="#{applyAccessBean.request()}"/>
+            <h:message for="Email"/>
+        </h:panelGrid>
+        </h:form>
+        <br/>
+        <h3 style="color: red">#{applyAccessBean.message1}</h3>
+        <h3>#{applyAccessBean.message2}</h3>
+        <h:outputLink value="login.xhtml">Go Back...</h:outputLink>
+    </h:body>
+</html>
