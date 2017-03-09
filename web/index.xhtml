@@ -11,15 +11,35 @@
     </h:head>
     <h:body>
       <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
-        <h1><h:outputLabel>Hello</h:outputLabel></h1>       
-        <ul>
-            <ui:repeat value="#{bookBean.titles}" var="title">
-                <li>#{title}</li>
-            </ui:repeat>        
-        </ul>
-        
-        <h1><h:outputText value="#{book.s}"/></h1>
-        
+      
+      <h:panelGrid columns="3">
+      <h:form>
+            <h:panelGrid columns="3">
+            <h:outputText value="View a book : " />
+            <h:selectOneMenu value="#{bookBean.isbn}">
+                <f:selectItems value="#{bookBean.bookSelect}" />
+            </h:selectOneMenu>
+            <h:commandButton value="View" action="#{bookBean.viewBook()}" >
+                <f:param name="typecode" value="#{logedInUser.login.userTypeCode}" />
+            </h:commandButton>
+            </h:panelGrid>
+        </h:form>
+          
+          <h:panelGrid columns="1"></h:panelGrid>
+      
+      <h:form>
+          
+           <h:panelGrid columns="3">
+               <h:outputLabel for="search" value="Search for a book : " />
+               <h:inputText id="search" value="#{bookBean.search}">
+                </h:inputText>
+               <h:commandButton value="Search" />
+           </h:panelGrid>
+          
+      </h:form>
+          
+          </h:panelGrid>
+          
         <h:dataTable value="#{bookBean.bookList}"  var="book" styleClass="table table-striped" >
             <h:column>
                 <f:facet name="header">ISBN Code</f:facet>

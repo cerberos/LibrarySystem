@@ -19,6 +19,7 @@ public class Login {
     {
         
     }
+    
     public Login(int userID, String email, int utc, int active){
         this.setUserID(userID);
         this.setEmail(email);

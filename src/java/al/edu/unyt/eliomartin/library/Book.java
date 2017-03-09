@@ -16,21 +16,8 @@ import java.io.Serializable;
  *
  * @author EN
  */
-@Named( "book" )
-	
-@ManagedBean
-@SessionScoped
+@ManagedBean(name="book")
 public class Book implements Serializable{
-    
-    public String s="ELIO";
-
-    public  String getS() {
-        return s;
-    }
-
-    public  void setS(String s) {
-        this.s = s;
-    }
     
     private String isbn;
     private String title;
@@ -40,15 +27,8 @@ public class Book implements Serializable{
     private int numberOfCopies;
     private int editionNo;
     
-    public Book ()
-    {
-       this.setDescription(description);
-       this.setIsbn(isbn);
-       this.setNumberOfCopies(numberOfCopies);
-       this.setHoldFlag(holdFlag);
-       this.setTitle(title);
-       this.setEditionNo(editionNo);
-       this.setSubcategoryID(subcategoryID);
+    public Book (){
+        
     }
     
     public Book (String isbn, String title, String description, int subcategoryID, String holdFlag, int numberOfCopies, int editionNo)
@@ -61,6 +41,7 @@ public class Book implements Serializable{
        this.setEditionNo(editionNo);
        this.setSubcategoryID(subcategoryID);
     }
+    
     public String getIsbn() {
         return isbn;
     }

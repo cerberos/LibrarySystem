@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -30,7 +31,15 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
- 
+    private ArrayList<String> keepUserID= new ArrayList<String>();
+
+    public ArrayList<String> getKeepUserID() {
+        return keepUserID;
+    }
+
+    public void setKeepUserID(ArrayList<String> keepUserID) {
+        this.keepUserID = keepUserID;
+    }
     private int loginid;
     private String loginpass;
     
@@ -59,7 +68,7 @@ public class LogedInUser implements Serializable {
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
                 if(rs.next()){
-                
+                keepUserID.add(this.loginid + "");
                 user.setAddress(rs.getString("address"));
                 user.setBirthDate(rs.getDate("birthdate"));
                 user.setGender(rs.getString("gender"));
@@ -183,6 +192,10 @@ public class LogedInUser implements Serializable {
     public Login getLogin() {
         return login;
     }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
     
     public String getNewPasswd() {
         return newPasswd;
@@ -190,10 +203,6 @@ public class LogedInUser implements Serializable {
 
     public void setNewPasswd(String newPasswd) {
         this.newPasswd = newPasswd;
-    }
-
-    public void setLogin(Login login) {
-        this.login = login;
     }
 
     public User getUser() {

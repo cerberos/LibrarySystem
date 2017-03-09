@@ -23,10 +23,10 @@ and open the template in the editor.
                 </h:inputText>
             <h:message for="UserID"/>
             <h:outputText value="Password" />
-            <h:inputText id="pass" required="true" 
+            <h:inputSecret id="pass" required="true" 
                          value="#{logedInUser.loginpass}"
                          requiredMessage="Please write your password">
-            </h:inputText>
+            </h:inputSecret>
             <h:message for="pass"/>
         </h:panelGrid>
             <p></p>
