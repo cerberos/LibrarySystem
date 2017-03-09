@@ -11,7 +11,7 @@ import java.sql.Date;
  *
  * @author Coding
  */
-public class Users {
+public class User {
     private String name;
     private String surname;
     private String address;
@@ -19,7 +19,11 @@ public class Users {
     private Date birthDate;
     private String gender;
     
-    public Users(String name, String surname, String address, 
+    public User()
+    {
+        
+    }
+    public User(String name, String surname, String address, 
             String phone, Date birthDate, String gender){
         this.setName(name);
         this.setSurname(surname);

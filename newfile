@@ -1,0 +1,92 @@
+               <h:selectOneMenu id="selectLibrarianEmail" value="#{adminBean.email}">               
+                    <f:selectItems value="#{adminBean.librariansEmails}"/>
+                </h:selectOneMenu>
+                <h:message id="kot1" for="" styleClass="error"/>
+
+
+
+<h2>Create Instructor</h2>
+        <h:messages id="instructorCreationStatus" styleClass="error" />
+        <h:panelGrid columns="3">
+                <h:outputText value="User Email:" />
+                <h:selectOneMenu id="selectInstructorEmail" value="#{adminBean.email}">               
+                    <f:selectItems value="#{adminBean.instructorsEmails}"/>
+                </h:selectOneMenu>
+                <h:message id="kot2" for="" styleClass="error"/>
+                <h:outputText value="Password:" />
+                <h:inputSecret id="inputInstructorPassword" value="#{adminBean.password}" required="true" requiredMessage="Please enter a password!" validatorMessage="Password should be more than 5 characters">
+                <f:validateLength minimum="5"/>
+                </h:inputSecret>
+                <h:message id="inputInstructorPasswordMessage" for="inputInstructorPassword" styleClass="error"/>
+        </h:panelGrid>  
+        <p/>
+          <h:commandButton value="Create Instructor" action="#{adminBean.createInstructor}">
+             <f:ajax execute="inputInstructorPassword selectInstructorEmail" render="inputInstructorPassword selectInstructorEmail inputInstructorPasswordMessage instructorCreationStatus"/>
+        </h:commandButton>
+
+
+
+
+
+
+  public ArrayList<String> getLibrariansEmails() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> emails=new ArrayList();
+        db=new Database("Select email from logins where usertypecode=1 and password=''");
+        rs=db.getSelect();
+        while(rs.next())
+        {
+            emails.add(rs.getString("email"));
+        }
+        db.close();
+        rs.close();
+        return emails;       
+    }
+    
+    
+    public ArrayList<String>  getInstructorsEmails() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> emails=new ArrayList();
+        db=new Database("Select email from logins where usertypecode=2 and password=''");
+        rs=db.getSelect();
+         while(rs.next())
+        {
+            emails.add(rs.getString("email"));
+        }    
+        db.close();
+        rs.close();
+        return emails;      
+    }
+    
+    
+
+    public void createInstructor() throws SQLException, ClassNotFoundException
+         {
+             String email=this.getEmail();
+             String password=this.getPassword();
+             db=new Database("UPDATE logins SET Password=? where email=?");
+             db.getSt().setString(1, this.password);
+             db.getSt().setString(2, this.email);
+             
+             if(db.update())
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor was created succesfully!"));
+             else
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor creation failed!")); 
+             
+             db.close();
+         }
+         
+    public void createLibrarian() throws SQLException, ClassNotFoundException
+         {
+             String email=this.getEmail();
+             String password=this.getPassword();
+             db=new Database("UPDATE logins SET Password=? where email=?");
+             db.getSt().setString(1, this.password);
+             db.getSt().setString(2, this.email);
+            
+             if(db.update())
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Librarian was created succesfully!"));
+             else
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Librarian creation failed!"));   
+             db.close();
+         }

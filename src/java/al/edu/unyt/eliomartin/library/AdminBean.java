@@ -30,47 +30,148 @@ public class AdminBean {
     String bookCategoryName;   //This is used to create new category
     String bookCategoryName1; //This is used for the listing the categories
     String bookSubcategoryName;
-
+    String userType;
+    String pendingRequestEmail;
+    
     Database db = null;
     ResultSet rs= null;
 
-    Book book;
-
-   
-
-    
+    Book book= new Book();
+  
     public AdminBean()
     {
       
     }
     
+    public ArrayList<String> getUserTypes() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<String> usertypes= new ArrayList();
+        
+        db=new Database("Select * from user_types where userTypecode=1 OR userTypecode=2");
+        rs=db.getSelect();
+        while(rs.next())
+        { 
+            usertypes.add("ID "+rs.getInt("userTypeCode")+" : "+rs.getString("name"));
+        }
+        rs.close();
+        db.close();
+        return usertypes;       
+           
+    }
+    
+    public ArrayList<String> getPendingRequests() throws SQLException, ClassNotFoundException
+    {
+        ArrayList<Integer> id= new ArrayList();
+        ArrayList<String> emails=new ArrayList();
+        db=new Database("Select * from system_access_requests");
+       
+        rs=db.getSelect();
+        while(rs.next())
+        {
+            id.add(rs.getInt("userid"));
+        }
+        
+        db.close();
+        rs.close();
+        
+        for(int i:id)
+        {
+            db=new Database("Select email from logins where userTypeCode>0 and userid="+i);
+            rs=db.getSelect();
+            if(rs.next())
+            emails.add(rs.getString("email"));
+            db.close();
+            rs.close();
+            
+        }
+        
+        return emails;
+    }
+    
+    public void validateRequest() throws SQLException, ClassNotFoundException
+    {
+        db=new Database("UPDATE logins SET active=1 where email=?");
+        
+        db.getSt().setString(1, this.pendingRequestEmail);
+        if(db.update())
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User was succesfully validated!"));
+        else
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User validation failed!"));            
+        
+        db.close();
+        db=new Database("Delete from system_access_requests  where userid=(select userid from logins where email=?)");
+        db.getSt().setString(1, this.pendingRequestEmail);
+        db.update();
+        db.close();
+    }
+    
     public void insertBook() throws SQLException, ClassNotFoundException
     {
+        
+        db=new Database("Select * from books where isbn=?");
+        db.getSt().setString(1, book.getIsbn());
+        
+        if(db.getSelect().next())
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This book already exists!"));
+        }
+        
+        else
+        {
+        db.close();
         db=new Database("INSERT INTO books (ISBN, Title, Description, SubcategoryID, NumberOfCopies, HoldFlag, EditionNo) VALUES (?, ?, ?, ?, ? , ?, ?)");
-        //book=new Book();
-        book.setSubcategoryID(Integer.parseInt(bookSubcategoryName.substring(2, bookCategoryName1.indexOf(":")).replaceAll("\\s","")));    
+        book.setSubcategoryID(Integer.parseInt(bookSubcategoryName.substring(2, bookSubcategoryName.indexOf(":")).replaceAll("\\s","")));
+          
         db.getSt().setString(1, book.getIsbn());
         db.getSt().setString(2, book.getTitle());
         db.getSt().setString(3, book.getDescription());
         db.getSt().setInt(4, book.getSubcategoryID());
         db.getSt().setInt(5, book.getNumberOfCopies());
         db.getSt().setString(6, book.getHoldFlag());
-        db.getSt().setInt(7, book.getEditionNo());
-        
+        db.getSt().setInt(7, book.getEditionNo());       
         if(db.update())
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book was succesfully inserted!"));
         else
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book insertion failed!"));   
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book insertion failed!"));            
+        }
+       
         db.close();
-        
-        
+        bookSubcategoryName=""; 
+              
+    }
+    
+        public void createUser () throws SQLException, ClassNotFoundException
+    {
+             int userTypeCode=Integer.parseInt(userType.substring(2, userType.indexOf(":")).replaceAll("\\s",""));    
+             
+             db=new Database("Select * from logins where email=?");
+             db.getSt().setString(1, email);
+             if(db.getSelect().next())
+             {
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This user already exists!"));
+             }
+             else
+             {
+             db.close();
+             db=new Database("INSERT INTO logins (Email, Password, UserTypeCode, active) VALUES (?, ?, ?, 0)");          
+             db.getSt().setString(1, this.email);
+             db.getSt().setString(2, this.password);            
+             db.getSt().setInt(3, userTypeCode);
+             
+             if(db.update())
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor was created succesfully!"));
+             else
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor creation failed!"));
+             }
+           
+             db.close();
     }
     
     public void createBookSubcategory() throws SQLException, ClassNotFoundException
     {
         
         int categoryid=Integer.parseInt(bookCategoryName1.substring(2, bookCategoryName1.indexOf(":")).replaceAll("\\s",""));    
- 
+        
         db=new Database("Insert into subcategories (name, categoryid) values (?, ?)");
         db.getSt().setString(1, this.bookSubcategoryName);
         db.getSt().setInt(2, categoryid);
@@ -81,10 +182,9 @@ public class AdminBean {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subcategory creation failed!")); 
              
         db.close();
+        bookCategoryName1="";
         
-    }
-    
-    
+    }    
 
     public ArrayList<String> getBookCategories() throws SQLException, ClassNotFoundException
     {
@@ -112,8 +212,7 @@ public class AdminBean {
         rs=db.getSelect();
         while(rs.next())
         {
-//            ids.add(rs.getInt("categoryid"));
-//            names.add(rs.getString("name"));
+
               bookSubcategories.add("ID "+rs.getInt("subcategoryid")+" : "+rs.getString("name"));
         }
         rs.close();
@@ -137,66 +236,7 @@ public class AdminBean {
         
     }
         
-    public ArrayList<String> getLibrariansEmails() throws SQLException, ClassNotFoundException
-    {
-        ArrayList<String> emails=new ArrayList();
-        db=new Database("Select email from logins where usertypecode=1 and password=''");
-        rs=db.getSelect();
-        while(rs.next())
-        {
-            emails.add(rs.getString("email"));
-        }
-        db.close();
-        rs.close();
-        return emails;       
-    }
-    
-    
-    public ArrayList<String>  getInstructorsEmails() throws SQLException, ClassNotFoundException
-    {
-        ArrayList<String> emails=new ArrayList();
-        db=new Database("Select email from logins where usertypecode=2 and password=''");
-        rs=db.getSelect();
-         while(rs.next())
-        {
-            emails.add(rs.getString("email"));
-        }    
-        db.close();
-        rs.close();
-        return emails;      
-    }
-    
-    
-    public void createInstructor() throws SQLException, ClassNotFoundException
-         {
-             String email=this.getEmail();
-             String password=this.getPassword();
-             db=new Database("UPDATE logins SET Password=? where email=?");
-             db.getSt().setString(1, this.password);
-             db.getSt().setString(2, this.email);
-             
-             if(db.update())
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor was created succesfully!"));
-             else
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Instructor creation failed!")); 
-             
-             db.close();
-         }
-         
-    public void createLibrarian() throws SQLException, ClassNotFoundException
-         {
-             String email=this.getEmail();
-             String password=this.getPassword();
-             db=new Database("UPDATE logins SET Password=? where email=?");
-             db.getSt().setString(1, this.password);
-             db.getSt().setString(2, this.email);
-            
-             if(db.update())
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Librarian was created succesfully!"));
-             else
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Librarian creation failed!"));   
-             db.close();
-         }
+  
          
     public String getPassword() {
         return password;
@@ -248,15 +288,27 @@ public class AdminBean {
         this.book = book;
     }
     
+        
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+        public String getPendingRequestEmail() {
+        return pendingRequestEmail;
+    }
+
+    public void setPendingRequestEmail(String pendingRequestEmail) {
+        this.pendingRequestEmail = pendingRequestEmail;
+    }
     public static void main(String[] args) throws SQLException, ClassNotFoundException
     {
-        AdminBean b= new AdminBean();
+        
        
-        b.createBookSubcategory();
-        for(String s: b.getInstructorsEmails())
-        {
-        System.out.println(s);
-        }      
+            
     }
       
       

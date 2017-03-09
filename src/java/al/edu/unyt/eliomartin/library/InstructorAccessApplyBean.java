@@ -20,12 +20,12 @@ public class InstructorAccessApplyBean implements Serializable {
     
     
     String sql = "select count(*) from system_access_requests where UserID=?";
-    private Logins login = null;
+    private Login login = null;
     
     public String haveRequested(){
-        
+        return "";
     }
     
     
-    
+
 }

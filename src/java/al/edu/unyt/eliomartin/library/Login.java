@@ -9,13 +9,17 @@ package al.edu.unyt.eliomartin.library;
  *
  * @author Coding
  */
-public class Logins {
+public class Login {
     private int userID;
     private String email;
     private int userTypeCode;
     private int active;
     
-    public Logins(int userID, String email, int utc, int active){
+    public Login()
+    {
+        
+    }
+    public Login(int userID, String email, int utc, int active){
         this.setUserID(userID);
         this.setEmail(email);
         this.setUserTypeCode(utc);
