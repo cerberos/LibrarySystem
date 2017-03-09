@@ -34,7 +34,17 @@ public class LogedInUser implements Serializable {
     private int loginid;
     private String loginpass;
     
-
+    public LogedInUser()
+    {
+        
+    }
+    
+    public String logout()
+    {
+         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+         return "login";
+    }
+    
     public void updateUserInformation () throws SQLException, ClassNotFoundException
     {
         Date birth = new Date(user.getBirthDate().getTime());

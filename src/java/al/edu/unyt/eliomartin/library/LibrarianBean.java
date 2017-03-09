@@ -35,15 +35,7 @@ public class LibrarianBean {
     Database db = null;
     ResultSet rs= null;
     Book book= new Book();
-    
-      public static void main(String[] args) throws SQLException, ClassNotFoundException
-    {
-        LibrarianBean a = new LibrarianBean();
-        for(String b:a.getUserTypes())
-        System.out.println(b);   
-            
-    }
-      
+          
     public LibrarianBean()
     {
       
@@ -54,7 +46,7 @@ public class LibrarianBean {
     {
         ArrayList<String> usertypes= new ArrayList();
         
-        db=new Database("Select * from user_types");
+        db=new Database("Select * from user_types where Usertypecode=2 or usertypecode=3");
         rs=db.getSelect();
         while(rs.next())
         { 

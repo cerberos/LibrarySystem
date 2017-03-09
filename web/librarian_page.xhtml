@@ -9,8 +9,11 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-        <h1>Welcome Librarian #{logedInUser.user.name} </h1>
+        
         <h:form>
+        <h:commandLink value="Logout" action="#{logedInUser.logout}"/>
+        
+        <h1>Welcome Librarian #{logedInUser.user.name} </h1>
         <h:outputLink value="view_profile.xhtml">View Profile</h:outputLink>
         <p/>
         
@@ -28,7 +31,7 @@
                 
                <h:outputText value="User Type:" />
                <h:selectOneMenu id="selectUserType" value="#{librarianBean.userType}">               
-                    <f:selectItems value="#{LibrarianBean.userTypes}"/>
+                    <f:selectItems value="#{librarianBean.userTypes}"/>
                </h:selectOneMenu>
                 <h:message id="kot11" for="" styleClass="error"/>
                 
@@ -61,7 +64,7 @@
                 <h:message id="inputSubcategoryNameMessage" for="inputSubcategoryName" styleClass="error"/>      
                 <h:outputText value="Select belonging category:" />
                 <h:selectOneMenu id="selectBelongingCategory" value="#{librarianBean.bookCategoryName1}">               
-                    <f:selectItems value="#{adminBean.bookCategories}"/>
+                    <f:selectItems value="#{librarianBean.bookCategories}"/>
                 </h:selectOneMenu>
                 <h:message id="kot3" for="" styleClass="error"/>   
                 

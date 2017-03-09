@@ -304,12 +304,11 @@ public class AdminBean {
     public void setPendingRequestEmail(String pendingRequestEmail) {
         this.pendingRequestEmail = pendingRequestEmail;
     }
+    
     public static void main(String[] args) throws SQLException, ClassNotFoundException
     {
         LibrarianBean a = new LibrarianBean();
-        System.out.println(a.getUserTypes().size());
-       
-            
+        System.out.println(a.getUserTypes().size());  
     }
       
       
