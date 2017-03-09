@@ -8,26 +8,26 @@
         <title>Librarian Page</title>
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
-    <h:body>
-        
-        <h:form>
-        <h:commandLink value="Logout" action="#{logedInUser.logout}"/>
-        
+    <h:body> 
+        <h:form>       
+         <h:commandLink value="Logout" action="#{logedInUser.logout}">
+            <f:ajax execute="" />
+        </h:commandLink>      
         <h1>Welcome Librarian #{logedInUser.user.name} </h1>
         <h:outputLink value="view_profile.xhtml">View Profile</h:outputLink>
         <p/>
         
         <h2>Create Instructor/Student</h2>
-        <h:messages id="userCreationStatus" styleClass="error" />
+        <h:messages id="userCreationStatus"  styleClass="error"/>
         <h:panelGrid columns="3">
                 <h:outputText value="User Email: " />
                 <h:inputText id="userEmail" value="#{librarianBean.email}" required="true" requiredMessage="Please enter an email!"/>
-                <h:message id="userEmailMessage" for="userEmail" styleClass="error"/>               
+                <h:message id="userEmailMessage" for="userEmail" styleClass="error" />               
                 <h:outputText value="Password:" />
                 <h:inputSecret id="inputUserPassword" value="#{librarianBean.password}" required="true" requiredMessage="Please enter a password!" validatorMessage="Password should be more than 5 characters">
                     <f:validateLength minimum="5"/>
                 </h:inputSecret>               
-                <h:message id="inputUserPasswordMessage" for="inputUserPassword" styleClass="error"/> 
+                <h:message id="inputUserPasswordMessage" for="inputUserPassword" styleClass="error" /> 
                 
                <h:outputText value="User Type:" />
                <h:selectOneMenu id="selectUserType" value="#{librarianBean.userType}">               
@@ -90,7 +90,7 @@
                <h:message id="inputTitleMessage" for="inputTitle" styleClass="error"/>
                
                <h:outputText value="Description: " />
-               <h:inputText id="inputDescription" value="#{librarianBean.book.description}" required="true" requiredMessage="Please insert a Description for the book!"/>
+               <h:inputText id="inputDescription" value="#{librarianBean.book.description}" required="true" requiredMessage="Please insert a description for the book!"/>
                <h:message id="inputDescriptionMessage" for="inputDescription" styleClass="error"/>
                
                 <h:outputText value="Book Subcategory: " />
@@ -162,6 +162,8 @@
         <h:commandButton value="Change Password" action="#{logedInUser.changePasswd()}">
              <f:ajax execute="newPassword repeatPassword" render="changePasswordStatus newPasswordMessage repeatPasswordMessage"/>
         </h:commandButton>
+        
+
         <p/>
         
         </h:form>

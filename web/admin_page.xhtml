@@ -9,9 +9,12 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-        <h1>Welcome Administrator #{logedInUser.user.name} </h1>
         <h:form>
-            
+        <h:commandLink value="Logout" action="#{logedInUser.logout}">
+        <f:ajax execute="" />
+        </h:commandLink> 
+        <h1>Welcome Administrator #{logedInUser.user.name} </h1>
+
         <h2>Create User</h2>
         <h:messages id="userCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
@@ -84,7 +87,7 @@
                <h:message id="inputTitleMessage" for="inputTitle" styleClass="error"/>
                
                <h:outputText value="Description: " />
-               <h:inputText id="inputDescription" value="#{adminBean.book.description}" required="true" requiredMessage="Please insert a Description for the book!"/>
+               <h:inputText id="inputDescription" value="#{adminBean.book.description}" required="true" requiredMessage="Please insert a description for the book!"/>
                <h:message id="inputDescriptionMessage" for="inputDescription" styleClass="error"/>
                
                 <h:outputText value="Book Subcategory: " />

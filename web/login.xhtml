@@ -14,15 +14,16 @@ and open the template in the editor.
     </h:head>
     <h:body>
         <h:form>
+        <h1>Login</h1>
         <h:messages id="userLoginStatus" styleClass="error" />
         <h:panelGrid columns="3">
-            <h:outputText value="UserID" />
+            <h:outputText value="UserID:" />
                 <h:inputText id="UserID" required="true" 
                              value="#{logedInUser.loginid}"
                              requiredMessage="Please write your user id">
                 </h:inputText>
             <h:message for="UserID"/>
-            <h:outputText value="Password" />
+            <h:outputText value="Password:" />
             <h:inputSecret id="pass" required="true" 
                          value="#{logedInUser.loginpass}"
                          requiredMessage="Please write your password">

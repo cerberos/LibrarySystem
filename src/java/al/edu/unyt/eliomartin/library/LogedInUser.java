@@ -41,7 +41,7 @@ public class LogedInUser implements Serializable {
     
     public String logout()
     {
-         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+         //FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
          return "login";
     }
     
