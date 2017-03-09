@@ -24,7 +24,7 @@ public class ApplyAccessBean implements Serializable {
     String sql = "select count(`sar`.`UserID`) as count, l.userid as id from system_access_requests sar, logins l"
             + " where l.userid = sar.userid and l.email = ?";
     
-    private Logins login = null;
+    private Login login = new Login();
     private String email;
     private String message1;
     private String message2;

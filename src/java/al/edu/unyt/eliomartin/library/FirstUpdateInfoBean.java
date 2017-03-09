@@ -17,7 +17,7 @@ import javax.faces.validator.FacesValidator;
 public class FirstUpdateInfoBean implements Serializable {
     private String password;
     private String confirmPassword;
-    private Users user;
+    private User user = new User();
     
     
 
@@ -37,11 +37,11 @@ public class FirstUpdateInfoBean implements Serializable {
         this.confirmPassword = confirmPassword;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
     

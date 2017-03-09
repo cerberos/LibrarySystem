@@ -42,7 +42,10 @@ public class LogedInUser implements Serializable {
     
     public Boolean loginValidation() throws SQLException, ClassNotFoundException
     {
-        Database db=new Database("select * from logins where email=? and password=?");
+        
+        Database db=new Database("select * from logins where userid=? and password=?");
+        db.getSt().setInt(1, this.loginid);
+        db.getSt().setString(1, this.loginpass);
         ResultSet rs=db.getSelect();
         if(rs.next())
         {
