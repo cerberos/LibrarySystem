@@ -14,7 +14,7 @@ and open the template in the editor.
     </h:head>
     <h:body>
         <h:form>
-        <h:messages id="userCreationStatus" styleClass="error" />
+        <h:messages id="userLoginStatus" styleClass="error" />
         <h:panelGrid columns="3">
             <h:outputText value="UserID" />
                 <h:inputText id="UserID" required="true" 
@@ -30,7 +30,7 @@ and open the template in the editor.
             <h:message for="pass"/>
         </h:panelGrid>
             <p></p>
-            <h:commandButton value="Submit" action="#{logedInUser.tryLogin}"/>
+            <h:commandButton value="Submit" action="#{logedInUser.loginCheck()}"/>
             <p></p>
             <h:outputLink value="applyAccess.xhtml">Apply For Access</h:outputLink>
         </h:form>
