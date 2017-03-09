@@ -13,8 +13,21 @@
          <h:commandLink value="Logout" action="#{logedInUser.logout}">
             <f:ajax execute="" />
         </h:commandLink>      
+            
         <h1>Welcome Librarian #{logedInUser.user.name} </h1>
+        <h:panelGrid columns="1">
         <h:outputLink value="view_profile.xhtml">View Profile</h:outputLink>
+        <h:commandLink value="View Currently Loaned Books" action="#{librarianBean.currentlyLoanedBooks1()}">
+            <f:ajax execute="" />
+        </h:commandLink>  
+        <h:commandLink value="View Top Loaned Books" action="#{librarianBean.topLoanedBooks1()}">
+            <f:ajax execute="" />
+        </h:commandLink>
+        <h:commandLink value="View Top Loaners" action="#{librarianBean.topLoaners1()}">
+            <f:ajax execute="" />
+        </h:commandLink>
+        </h:panelGrid>
+        
         <p/>
         
         <h2>Create Instructor/Student</h2>

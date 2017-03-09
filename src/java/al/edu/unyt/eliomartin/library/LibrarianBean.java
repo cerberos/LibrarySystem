@@ -34,6 +34,52 @@ public class LibrarianBean {
     String pendingRequestEmail;
     Database db = null;
     ResultSet rs= null;
+    ArrayList<String> currentlyLoanedBooks=new ArrayList();
+    ArrayList<String> topLoanedBooks=new ArrayList();
+    ArrayList<String> topLoaners=new ArrayList();
+
+    
+    
+        public String topLoaners1() throws SQLException, ClassNotFoundException
+    {
+        db=new Database("select users.Name, users.Surname, loans_history.UserID, COUNT(*) as \"Times_Loaned\" from users, loans_history WHERE users.UserID=loans_history.UserID GROUP by userid ORDER by \"Times_Loaned\"");
+        topLoaners.clear();
+        rs=db.getSelect();
+        while(rs.next())
+            topLoaners.add(rs.getString("name")+" "+rs.getString("surname")+" (loaned "+rs.getInt("Times_Loaned")+" time/s)");
+              
+        rs.close();
+        db.close();
+        return "view_top_loaners";
+    }
+    public String topLoanedBooks1() throws SQLException, ClassNotFoundException
+    {
+        db=new Database("select books.title, loans_history.isbn, COUNT(*) as \"Times_Loaned\" from books, loans_history WHERE books.ISBN=loans_history.ISBN GROUP by isbn ORDER by \"Times_Loaned\";");
+        topLoanedBooks.clear();
+        rs=db.getSelect();
+        while(rs.next())
+            topLoanedBooks.add(rs.getString("title")+" (loaned "+rs.getInt("Times_Loaned")+" time/s)");
+              
+        rs.close();
+        db.close();
+        return "view_top_loaned_books";
+    }
+    
+    
+    public static void main(String[] args) throws SQLException, ClassNotFoundException
+    {
+        Database db=new Database("SELECT title from books WHERE ISBN IN (select isbn from loans_history WHERE datereturned is null)");
+        ResultSet rs=db.getSelect();
+        LibrarianBean a= new LibrarianBean();
+        while(rs.next())
+            System.out.println(rs.getString("title"));
+        
+        a.currentlyLoanedBooks1();
+        
+        System.out.println(a.getCurrentlyLoanedBooks().size());
+    }
+
+    
     Book book= new Book();
           
     public LibrarianBean()
@@ -41,6 +87,20 @@ public class LibrarianBean {
       
     }
     
+    public String currentlyLoanedBooks1() throws SQLException, ClassNotFoundException
+    {
+        db=new Database("SELECT title from books WHERE ISBN IN (select isbn from loans_history WHERE datereturned is null)");
+        currentlyLoanedBooks.clear();
+        rs=db.getSelect();
+        while(rs.next())
+            currentlyLoanedBooks.add(rs.getString("title"));
+        
+        
+        rs.close();
+        db.close();
+        return "view_currently_loaned_books";
+        
+    }
     
     public ArrayList<String> getUserTypes() throws SQLException, ClassNotFoundException
     {
@@ -301,5 +361,27 @@ public class LibrarianBean {
     public void setPendingRequestEmail(String pendingRequestEmail) {
         this.pendingRequestEmail = pendingRequestEmail;
     }
+    public ArrayList<String> getTopLoanedBooks() {
+        return topLoanedBooks;
+    }
+
+    public void setTopLoanedBooks(ArrayList<String> topLoanedBooks) {
+        this.topLoanedBooks = topLoanedBooks;
+    }
     
+    public ArrayList<String> getCurrentlyLoanedBooks() {
+        return currentlyLoanedBooks;
+    }
+
+    public void setCurrentlyLoanedBooks(ArrayList<String> currentlyLoanedBooks) {
+        this.currentlyLoanedBooks = currentlyLoanedBooks;
+    }
+    
+    public ArrayList<String> getTopLoaners() {
+        return topLoaners;
+    }
+
+    public void setTopLoaners(ArrayList<String> topLoaners) {
+        this.topLoaners = topLoaners;
+    }
 }
