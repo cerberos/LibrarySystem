@@ -9,12 +9,13 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body> 
+        <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+        <f:event type="preRenderView" listener="#{logedInUser.isLibrarian}" />        
+
         <h:form>       
-         <h:commandLink value="Logout" action="#{logedInUser.logout}">
-            <f:ajax execute="" />
-        </h:commandLink>      
+        <h:outputLink value="index.xhtml">Go back to Index...</h:outputLink>    
             
-        <h1>Welcome Librarian #{logedInUser.user.name} </h1>
+        <h1>Librarian functionalities: Welcome #{logedInUser.user.name} </h1>
         <h:panelGrid columns="1">
         <h:outputLink value="view_profile.xhtml">View Profile</h:outputLink>
         <h:commandLink value="View Currently Loaned Books" action="#{librarianBean.currentlyLoanedBooks1()}">

@@ -10,11 +10,32 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-      <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
       
-      <h:panelGrid columns="3">
+       
+      
       <h:form>
+      <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+                 
+        <h:commandLink value="Logout" action="#{logedInUser.logout}">
+        <f:ajax execute="" />
+        </h:commandLink> 
+          
+       </h:form>
+        
+         <p/>
+         <h1>Welcome to Index #{logedInUser.user.name} </h1>
+        <h:form>
             <h:panelGrid columns="3">
+            <h:outputText value="Navigate to functionalities of : " />
+            <h:selectOneMenu  id="selectPage" value="#{logedInUser.page}">
+                <f:selectItems value="#{logedInUser.pagesToNavigate}" />
+            </h:selectOneMenu>
+            <h:commandButton value="Go" action="#{logedInUser.page1()}" >
+                <f:ajax execute="selectPage" />
+            </h:commandButton>
+            </h:panelGrid>
+         <p/>
+            <h:panelGrid columns="6">
             <h:outputText value="View a book : " />
             <h:selectOneMenu value="#{bookBean.isbn}">
                 <f:selectItems value="#{bookBean.bookSelect}" />
@@ -22,23 +43,16 @@
             <h:commandButton value="View" action="#{bookBean.viewBook()}" >
                 <f:param name="typecode" value="#{logedInUser.login.userTypeCode}" />
             </h:commandButton>
-            </h:panelGrid>
-        </h:form>
-          
-          <h:panelGrid columns="1"></h:panelGrid>
-      
-      <h:form>
-          
-           <h:panelGrid columns="3">
-               <h:outputLabel for="search" value="Search for a book : " />
+            
+            <h:outputText value="Search for a book : " />
                <h:inputText id="search" value="#{bookBean.search}">
                 </h:inputText>
                <h:commandButton value="Search" />
-           </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
           
-      </h:form>
-          
-          </h:panelGrid>
+      
+              
           
         <h:dataTable value="#{bookBean.bookList}"  var="book" styleClass="table table-striped" >
             <h:column>

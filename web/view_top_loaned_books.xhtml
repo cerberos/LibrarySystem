@@ -10,7 +10,9 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
-        <h:outputLink value="librarian_page.xhtml">Go Back...</h:outputLink>
+        <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+        <f:event type="preRenderView" listener="#{logedInUser.isLibrarian}" />
+    <h:outputLink value="librarian_page.xhtml">Go back ...</h:outputLink>
      <!-- <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> -->
         <h1><h:outputLabel>List of top loaned books:</h:outputLabel></h1>       
         <ul>

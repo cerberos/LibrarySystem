@@ -9,10 +9,11 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+        <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+        <f:event type="preRenderView" listener="#{logedInUser.isAdmin}" />
+        
         <h:form>
-        <h:commandLink value="Logout" action="#{logedInUser.logout}">
-        <f:ajax execute="" />
-        </h:commandLink> 
+        <h:outputLink value="index.xhtml">Go back to Index...</h:outputLink> 
         <h1>Welcome Administrator #{logedInUser.user.name} </h1>
 
         <h2>Create User</h2>

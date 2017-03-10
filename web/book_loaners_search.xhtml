@@ -11,7 +11,10 @@
     </h:head>
     <h:body>
         <h:form>
-        <h:outputLink value="librarian_page.xhtml">Go Back...</h:outputLink>
+         <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
+        <f:event type="preRenderView" listener="#{logedInUser.isLibrarian}" />
+        
+        <h:outputLink value="librarian_page.xhtml">Go back...</h:outputLink>
         <h1>Perform Searches</h1>
         <p/>
         <h:panelGrid columns="2">
@@ -33,9 +36,11 @@
         </h:panelGrid>
         <p/>
         
-        <h:commandButton value="Search" action="#{librarianBean.search}"/>
+        <h:commandButton value="Search" action="#{librarianBean.search}">
+        <f:ajax execute="table selectRadio selectCombo" render="table"/>
+        </h:commandButton>
         
-        <h:dataTable value="#{librarianBean.rows}"  var="row" styleClass="table table-striped" >
+        <h:dataTable id="table" value="#{librarianBean.rows}"  var="row" styleClass="table table-striped" >
             <h:column>
             <f:facet name="header">UserID</f:facet>
                 #{row.userid}

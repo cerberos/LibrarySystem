@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -31,18 +32,22 @@ public class LogedInUser implements Serializable {
     private String newPasswd;
     private Boolean isLogin=false;
     
-    private ArrayList<Integer> keepUserID= new ArrayList<Integer>();
-
-    public ArrayList<Integer> getKeepUserID() {
-        return keepUserID;
-    }
-
-    public void setKeepUserID(ArrayList<Integer> keepUserID) {
-        this.keepUserID = keepUserID;
-    }
-    
     private int loginid;
     private String loginpass;
+    private String page;
+    
+    public String page1()
+    {
+        return page;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
     
     public LogedInUser()
     {
@@ -96,12 +101,9 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
-                
                 if(rs.next())
                 {
-                keepUserID.clear();
-                if(rs.next()){
-                keepUserID.add(loginid);
+                
                 user.setAddress(rs.getString("address"));
                 user.setBirthDate(rs.getDate("birthdate"));
                 user.setGender(rs.getString("gender"));
@@ -129,18 +131,42 @@ public class LogedInUser implements Serializable {
         }
     }
     
+    public ArrayList<String> getPagesToNavigate()
+    {
+        ArrayList<String> pages= new ArrayList<String>();
+        
+        if(login.getUserTypeCode()==0)
+        {
+            pages.add("admin_page");
+            pages.add("librarian_page");
+        }
+        if(login.getUserTypeCode()==1)
+        {
+
+            pages.add("librarian_page");
+        }
+        
+         if(login.getUserTypeCode()==2 || login.getUserTypeCode()==2 )
+        {
+
+            pages.add("view_profile");
+        }
+        return pages;
+    }
+    
     public String loginCheck() throws SQLException, ClassNotFoundException
     {
         if(loginValidation())
         {
-            if(login.getUserTypeCode()==0)
-                return "admin_page";
-            if(login.getUserTypeCode()==1)
-                return "librarian_page";
-            if(login.getUserTypeCode()==2)
-                return "instructor_page";
-            if(login.getUserTypeCode()==3)
-                return "student_page"; 
+//            if(login.getUserTypeCode()==0)
+//                return "admin_page";
+//            if(login.getUserTypeCode()==1)
+//                return "librarian_page";
+//            if(login.getUserTypeCode()==2)
+//                return "instructor_page";
+//            if(login.getUserTypeCode()==3)
+//                return "student_page"; 
+            return "index";
         }
         
         return null;
@@ -164,6 +190,33 @@ public class LogedInUser implements Serializable {
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/login.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
+        }
+            
+    }
+    
+    
+    public void isLibrarian() throws IOException {
+        if (this.login.getUserTypeCode()>1) {
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/index.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
+        }
+            
+    }
+    
+        public void isAdmin() throws IOException {
+        if (this.login.getUserTypeCode()>0) {
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/index.xhtml");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.err.print(e.hashCode());

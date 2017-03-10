@@ -22,36 +22,63 @@ import javax.faces.bean.ViewScoped;
 public class EditBookAvailabilityBean {
     private String message="";
     
-    //@ManagedProperty(value="#{param.book}")
-    private Book Book;
+    @ManagedProperty(value="#{bookBean.book}")
+    private Book book;
 
-   // @ManagedProperty(value="#{bookBean.book.isbn}")
-    private String isbn;
-    
-   // @ManagedProperty(value="#{bookBean.book.numberOfCopies}")
-    private int numberOfCopies;
-    private int userid;
+   @ManagedProperty(value="#{logedInUser.login}")
+    private Login login;
     
     public String loanBook() throws SQLException, ClassNotFoundException{
-        if (numberOfCopies>0){
+        if (book.getNumberOfCopies()>0){
             java.sql.Date d = new java.sql.Date(daysAfter(3).getTime());
             
             String sql = "insert into loans_history (userid, isbn, deadline) values (?,?,?)";
             Database db=new Database(sql);
-            db.getSt().setInt(1, userid);
-            db.getSt().setString(2, isbn);
+            db.getSt().setInt(1, login.getUserID());
+            db.getSt().setString(2, book.getIsbn());
             db.getSt().setDate(3, d);
         
             if(db.update()){
-                message="Congratulations! you got your book.<br/>";
-                return "index";
+                sql = "update books set numberofcopies=?,  where isbn=?";
+                db=new Database(sql);
+                db.getSt().setInt(1, book.getNumberOfCopies()-1);
+                db.getSt().setString(2, book.getIsbn());
+                
+                if(db.update()){
+                    message="Congratulations! you got your book.<br/>";
+                    return "index";
+                } else {
+                    message = "You can't get this book right now!<br/>";
+                    return null;
+            }
+                
             } else {
-                message = "You cang get this book right now!<br/>";
+                message = "You can't get this book right now!<br/>";
                 return null;
             }
         }
         message = "You can't get this book right now!<br/>";
         return null;
+    }
+    
+    public void putQueue() throws SQLException, ClassNotFoundException{
+        
+        if (book.getNumberOfCopies()==0){
+            
+            String sql = "insert into book_requests (userid, isbn, requesteddays) values (?,?,?)";
+            Database db=new Database(sql);
+            db.getSt().setInt(1, login.getUserID());
+            db.getSt().setString(2, book.getIsbn());
+            db.getSt().setInt(3, 3);
+        
+            if(db.update()){
+                message="Your request is put on queue.";
+            } else {
+                message = "The book is available";
+            }
+        } else {
+        message = "The book is available. please loan it directly.";
+        }
     }
     
     
@@ -70,27 +97,24 @@ public class EditBookAvailabilityBean {
         this.message = message;
     }
 
-    public int getUserid() {
-        return userid;
+    public Login getLogin() {
+        return login;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+    
+    
+
+    public Book getBook() {
+        return book;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public void setBook(Book book) {
+        this.book = book;
     }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public int getNumberOfCopies() {
-        return numberOfCopies;
-    }
-
-    public void setNumberOfCopies(int numberOfCopies) {
-        this.numberOfCopies = numberOfCopies;
-    }
+    
+    
+    
 }
