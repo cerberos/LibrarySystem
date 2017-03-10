@@ -33,20 +33,91 @@ public class LibrarianBean {
     String userType;
     String pendingRequestEmail;
     String loanType="all";
-
-
-    int userID;
+    String userID;
+    ArrayList<SearchRow> rows= new ArrayList();
     Database db = null;
     ResultSet rs= null;
     ArrayList<String> currentlyLoanedBooks=new ArrayList();
     ArrayList<String> topLoanedBooks=new ArrayList();
     ArrayList<String> topLoaners=new ArrayList();
 
-
-        public void Search()
+        public String book_loaners_search() throws SQLException, ClassNotFoundException
         {
+            db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN ORDER by loans_history.UserID");
+            rs=db.getSelect();
+            rows.clear();
             
+                while(rs.next())
+                {
+                    SearchRow r=new SearchRow();
+                    r.setUserid(rs.getInt("userid"));
+                    r.setName(rs.getString("name"));
+                    r.setSurname(rs.getString("surname"));
+                    r.setTitle(rs.getString("title"));
+                    this.rows.add(r);
+                }
             
+                db.close();
+                rs.close();
+            return "book_loaners_search";
+        }
+        
+        public void search() throws SQLException, ClassNotFoundException
+        {
+            if(loanType.equals("all"))
+            {
+                if(userID.equals("all"))
+                    db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN ORDER by loans_history.UserID");
+                
+                else
+                {
+                     db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN and loans_history.UserID=? ORDER by loans_history.UserID");
+                     userID=userID.substring(0, userID.indexOf(":"));
+                     db.getSt().setInt(1, Integer.parseInt(userID));
+                }
+                
+            }
+            else if(loanType.equals("current"))
+            {
+                if(userID.equals("all"))
+                    db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN and datereturned is null ORDER by loans_history.UserID");
+                
+                else
+                {
+                     db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN and loans_history.UserID=? and datereturned is null ORDER by loans_history.UserID");
+                     userID=userID.substring(0, userID.indexOf(":"));
+                     db.getSt().setInt(1, Integer.parseInt(userID));
+                }
+                
+            }
+            
+            else if (loanType.equals("past"))
+            {
+                if(userID.equals("all"))
+                    db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN and datereturned is not null ORDER by loans_history.UserID");
+                
+                else
+                {
+                     db=new Database("select loans_history.UserID, users.Name, users.Surname, books.Title from loans_history, users, books where loans_history.UserID=users.UserID and loans_history.ISBN=books.ISBN and loans_history.UserID=? and datereturned is not null ORDER by loans_history.UserID");
+                     userID=userID.substring(0, userID.indexOf(":"));
+                     db.getSt().setInt(1, Integer.parseInt(userID));
+                }
+            }
+            
+                rs=db.getSelect();
+                rows.clear();
+                while(rs.next())
+                {
+                    SearchRow r=new SearchRow();
+                    r.setUserid(rs.getInt("userid"));
+                    r.setName(rs.getString("name"));
+                    r.setSurname(rs.getString("surname"));
+                    r.setTitle(rs.getString("title"));
+                    this.rows.add(r);
+                }
+            
+                db.close();
+                rs.close();
         }
         
         public ArrayList<String> getusers() throws SQLException, ClassNotFoundException
@@ -410,11 +481,11 @@ public class LibrarianBean {
     }
     
     
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
         
@@ -424,5 +495,13 @@ public class LibrarianBean {
 
     public void setLoanType(String loanType) {
         this.loanType = loanType;
+    }
+    
+    public ArrayList<SearchRow> getRows() {
+        return rows;
+    }
+
+    public void setRows(ArrayList<SearchRow> rows) {
+        this.rows = rows;
     }
 }

@@ -10,6 +10,7 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+        <h:form>
         <h:outputLink value="librarian_page.xhtml">Go Back...</h:outputLink>
         <h1>Perform Searches</h1>
         <p/>
@@ -31,28 +32,30 @@
             </h:selectOneRadio>
         </h:panelGrid>
         <p/>
+        
         <h:commandButton value="Search" action="#{librarianBean.search}"/>
-        <h:dataTable value="#{bookBean.bookList}"  var="book" styleClass="table table-striped" >
+        
+        <h:dataTable value="#{librarianBean.rows}"  var="row" styleClass="table table-striped" >
             <h:column>
             <f:facet name="header">UserID</f:facet>
-                #{book.isbn}
+                #{row.userid}
             </h:column>
             <h:column >
                 <f:facet name="header">Name</f:facet>
-                #{book.title}
+                #{row.name}
             </h:column>
             <h:column>
                 <f:facet name="header">Surname</f:facet>
-                #{book.description}
+                #{row.surname}
             </h:column>
             <h:column>
                 <f:facet name="header">Book Title</f:facet>
-                #{book.subcategoryID}
+                #{row.title}
             </h:column>          
         </h:dataTable>
         
         <!-- Including javascript and jquery -->
-        
+     </h:form>   
         
     </h:body>
 </html>
