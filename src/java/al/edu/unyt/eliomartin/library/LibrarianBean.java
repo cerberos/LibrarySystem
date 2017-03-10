@@ -32,14 +32,38 @@ public class LibrarianBean {
     String bookSubcategoryName;
     String userType;
     String pendingRequestEmail;
+    String loanType="all";
+
+
+    int userID;
     Database db = null;
     ResultSet rs= null;
     ArrayList<String> currentlyLoanedBooks=new ArrayList();
     ArrayList<String> topLoanedBooks=new ArrayList();
     ArrayList<String> topLoaners=new ArrayList();
 
-    
-    
+
+        public void Search()
+        {
+            
+            
+        }
+        
+        public ArrayList<String> getusers() throws SQLException, ClassNotFoundException
+        {
+            ArrayList<String> users= new ArrayList();
+            db=new Database("select logins.UserID, users.Name, users.Surname from logins, users where logins.UserID=users.UserID and logins.UserTypeCode>1");
+            rs=db.getSelect();
+            
+            while(rs.next())
+            {
+             users.add(rs.getInt("userid")+": "+ rs.getString("name")+" "+rs.getString("surname"));            
+            }
+            db.close();
+            rs.close();
+            return users;
+                    
+        }
         public String topLoaners1() throws SQLException, ClassNotFoundException
     {
         db=new Database("select users.Name, users.Surname, loans_history.UserID, COUNT(*) as \"Times_Loaned\" from users, loans_history WHERE users.UserID=loans_history.UserID GROUP by userid ORDER by \"Times_Loaned\"");
@@ -383,5 +407,22 @@ public class LibrarianBean {
 
     public void setTopLoaners(ArrayList<String> topLoaners) {
         this.topLoaners = topLoaners;
+    }
+    
+    
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+        
+    public String getLoanType() {
+        return loanType;
+    }
+
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
     }
 }

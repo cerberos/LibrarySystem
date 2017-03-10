@@ -10,36 +10,45 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+        <h:outputLink value="librarian_page.xhtml">Go Back...</h:outputLink>
+        <h1>Perform Searches</h1>
+        <p/>
+        <h:panelGrid columns="2">
         
+        <h:outputText value="Select user:"/>
+        <h:selectOneMenu id="selectCombo" required="true" value="#{librarianBean.userID}">
+                <f:selectItem itemValue="all" itemLabel="All users"  />
+                <f:selectItems value="#{librarianBean.users}" />
+            </h:selectOneMenu>
+        </h:panelGrid>
+        
+        <h5>Select type of loans:</h5>
+        <h:panelGrid columns="4">
+            <h:selectOneRadio id="selectRadio" required="true" value="#{librarianBean.loanType}">
+                <f:selectItem itemValue="current" itemLabel="Current loans"  />
+                <f:selectItem itemValue="past" itemLabel="Past loans" />
+                <f:selectItem itemValue="all" itemLabel="All loans" />
+            </h:selectOneRadio>
+        </h:panelGrid>
+        <p/>
+        <h:commandButton value="Search" action="#{librarianBean.search}"/>
         <h:dataTable value="#{bookBean.bookList}"  var="book" styleClass="table table-striped" >
             <h:column>
-            <f:facet name="header">ISBN Code</f:facet>
+            <f:facet name="header">UserID</f:facet>
                 #{book.isbn}
             </h:column>
             <h:column >
-                <f:facet name="header">Title</f:facet>
+                <f:facet name="header">Name</f:facet>
                 #{book.title}
             </h:column>
             <h:column>
-                <f:facet name="header">Description</f:facet>
+                <f:facet name="header">Surname</f:facet>
                 #{book.description}
             </h:column>
             <h:column>
-                <f:facet name="header">Subcategory</f:facet>
+                <f:facet name="header">Book Title</f:facet>
                 #{book.subcategoryID}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Number of Copies</f:facet>
-                #{book.numberOfCopies}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Copies Available</f:facet>
-                #{book.isHoldFlag()}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Edition No.</f:facet>
-                #{book.editionNo}
-            </h:column>           
+            </h:column>          
         </h:dataTable>
         
         <!-- Including javascript and jquery -->
