@@ -30,7 +30,19 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
+<<<<<<< HEAD
  
+=======
+    private ArrayList<Integer> keepUserID= new ArrayList<Integer>();
+
+    public ArrayList<Integer> getKeepUserID() {
+        return keepUserID;
+    }
+
+    public void setKeepUserID(ArrayList<Integer> keepUserID) {
+        this.keepUserID = keepUserID;
+    }
+>>>>>>> origin/master
     private int loginid;
     private String loginpass;
     
@@ -86,9 +98,15 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
+<<<<<<< HEAD
                 if(rs.next())
                 {
                 
+=======
+                keepUserID.clear();
+                if(rs.next()){
+                keepUserID.add(loginid);
+>>>>>>> origin/master
                 user.setAddress(rs.getString("address"));
                 user.setBirthDate(rs.getDate("birthdate"));
                 user.setGender(rs.getString("gender"));
