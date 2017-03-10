@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+        <title>Check and edit your loans</title>
+        <h:outputStylesheet name="bootstrap.css" library="css"/>
+    </h:head>
+    <h:body>
+      <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
+      
+      <h:panelGrid columns="2">
+          
+          <h:dataTable value="#{viewEditLoansBean.getLoan_list()}"  var="loanList" styleClass="table table-striped" style="width: 100%">
+            <h:column>
+                <f:facet name="header">ISBN Code</f:facet>
+                #{loanList.isbn}
+            </h:column>
+            <h:column >
+                <f:facet name="header">Date the book was loaned</f:facet>
+                #{loanList.dateLoaned}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Return until</f:facet>
+                #{loanList.deadline}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fee paid</f:facet>
+                #{loanList.feePaid}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Returned date</f:facet>
+                #{loanList.dateReturned}
+            </h:column>
+        </h:dataTable>
+          
+      
+        <h:form>
+            <h:panelGrid columns="3" styleClass="table" style="width: 80%">
+                <h:outputText value="Select book ISBN that you want to return: " />
+            <h:selectOneMenu value="#{viewEditLoansBean.bookIsbn}">
+                <f:selectItems value="#{viewEditLoansBean.loaned()}" />
+            </h:selectOneMenu>
+            <h:commandButton value="Return Selected Book" styleClass="btn btn-warning" action="#{viewEditLoansBean.returnBook()}" />
+            <h:commandButton value="Check for Expiration" styleClass="btn btn-warning" action="#{viewEditLoansBean.checkForExpiration()}" />
+                    
+            </h:panelGrid>
+        </h:form>
+          </h:panelGrid>
+      <blockquote>
+          <p><h:outputText escape="false" value="#{viewEditLoansBean.message}" /></p>
+          <footer>System Message</footer>
+      </blockquote>
+    </h:body>
+</html>
+
+                  

@@ -39,7 +39,7 @@ public class EditBookAvailabilityBean {
             db.getSt().setDate(3, d);
         
             if(db.update()){
-                sql = "update books set numberofcopies=?,  where isbn=?";
+                sql = "update books set numberofcopies=? where isbn=?";
                 db=new Database(sql);
                 db.getSt().setInt(1, book.getNumberOfCopies()-1);
                 db.getSt().setString(2, book.getIsbn());
@@ -78,6 +78,36 @@ public class EditBookAvailabilityBean {
             }
         } else {
         message = "The book is available. please loan it directly.";
+        }
+    }
+    
+    public void holdBook() throws SQLException, ClassNotFoundException{
+        if (login.getUserTypeCode() == 2){
+            String sql = "update books set holdFlag=? where isbn=?";
+            Database db=new Database(sql);
+            db.getSt().setString(1, "t");
+            db.getSt().setString(2, book.getIsbn());
+            
+            if(db.update()){
+                message="Book <kbd>"+ book.getTitle() +"</kbd> set on hold status";
+            } else {
+                message = "There was a problem and the book status wasn't changed.";
+            }
+        }
+    }
+    
+    public void unholdBook() throws SQLException, ClassNotFoundException{
+        if (login.getUserTypeCode() == 2){
+            String sql = "update books set holdflag=? where isbn=?";
+            Database db=new Database(sql);
+            db.getSt().setString(1, "f");
+            db.getSt().setString(2, book.getIsbn());
+            
+            if(db.update()){
+                message="The book <kbd>"+ book.getTitle() +"</kbd> was removed from hold status.";
+            } else {
+                message = "There was a problem and the book status wasn't changed.";
+            }
         }
     }
     

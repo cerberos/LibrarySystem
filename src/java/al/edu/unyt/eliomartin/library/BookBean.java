@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 /**
@@ -38,15 +39,16 @@ public class BookBean implements Serializable{
     private int userid;
     private String isbn = "";
     private String search = "";
-    private String sql = "select * from books where title like '%' ? '%'";
+    private final String sql = "select * from books where title like '%' ? '%'";
     private ArrayList<Book> bookList= new ArrayList();
     private Map<String,String> bookSelect = new LinkedHashMap<String,String>();
+    
+    @ManagedProperty(value="#{logedInUser.login}")
+    private Login login;
     
     public BookBean() throws SQLException{
        
     } 
-    
-    
     
     
     public String loanBook() throws SQLException, ClassNotFoundException{
@@ -70,7 +72,6 @@ public class BookBean implements Serializable{
         message = "You can't get this book right now!<br/>";
         return null;
     }
-    
     
     private Date daysAfter(int day){
         Date currentDate = new Date();
@@ -96,14 +97,12 @@ public class BookBean implements Serializable{
     }
     
     
-    
-    
-    
     public String viewBook(){
         if(!isbn.equals(""))
             return "viewBook";
         return null;
     }
+    
     
      
     public ArrayList<Book> getBookList() throws SQLException, ClassNotFoundException
@@ -116,7 +115,9 @@ public class BookBean implements Serializable{
             rs= db.getSelect() ;
             while(rs.next())
             {
-                Book b=new Book(rs.getString("isbn"),rs.getString("title"),rs.getString("description"),rs.getInt("subcategoryid"),rs.getString("holdflag"),rs.getInt("numberofcopies"),rs.getInt("editionno"));
+                Book b=new Book(rs.getString("isbn"),rs.getString("title"),rs.getString("description"),
+                        rs.getInt("subcategoryid"),rs.getString("holdflag"),rs.getInt("numberofcopies"),
+                        rs.getInt("editionno"));
                 bookList.add(b);            
             }
             return bookList;
@@ -150,7 +151,7 @@ public class BookBean implements Serializable{
             rs= db.getSelect() ;
             
             while(rs.next())
-		bookSelect.put(rs.getString("title"), rs.getString("isbn"));
+		bookSelect.put(rs.getString("isbn"), rs.getString("isbn"));
         
         return bookSelect;
     }
@@ -186,32 +187,41 @@ public class BookBean implements Serializable{
 		book = new Book(rs.getString("isbn"),rs.getString("title"),rs.getString("description"),
                         rs.getInt("subcategoryid"),rs.getString("holdflag"),rs.getInt("numberofcopies"),rs.getInt("editionno"));
                 
-                if(book.getNumberOfCopies()==0){
-                    loan = "true";
-                    putQueue = "false"; 
+                if(login.getUserTypeCode() == 2){
+                    if (rs.getString("holdflag").equals("t")){
+                        hold = "true";
+                        unhold = "false";
+                    } else{
+                        hold = "false";
+                        unhold = "true";
+                    }
+                        
                 } else {
-                    loan = "false";
-                    putQueue = "true"; 
+                    hold = "true";
+                    unhold = "true";
                 }
                 
                 
                 if (rs.getString("holdflag").equals("t")){
-                    hold = "true";
-                    unhold = "false";
                     loan = "true";
-                    putQueue = "true"; 
+                    putQueue = "true";
                 } else {
-                    hold = "false";
-                    unhold = "true";
+                    if(book.getNumberOfCopies()==0){
+                        loan = "true";
+                        putQueue = "false"; 
+                    } else {
+                        loan = "false";
+                        putQueue = "true"; 
+                    }
                 }
                 
             }
             else {
                 book = new Book();
-                loan = "false";
-                putQueue = "false";  
-                hold = "flase";
-                unhold = "flase";
+                loan = "true";
+                putQueue = "true";  
+                hold = "true";
+                unhold = "true";
             }
             
         return book;
@@ -251,6 +261,14 @@ public class BookBean implements Serializable{
 
     public void setUnhold(String unhold) {
         this.unhold = unhold;
+    }
+
+    public Login getLogin() {
+        return login;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
     }
     
     

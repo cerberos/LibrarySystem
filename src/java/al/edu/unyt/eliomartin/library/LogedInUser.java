@@ -31,11 +31,9 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
-     private boolean isFirstLogin= false;
-    
     private int loginid;
     private String loginpass;
-    private String page;
+    private boolean isFirstLogin= false;
     
         public void isFirstLime() throws IOException {
         if (this.isFirstLogin) {
@@ -173,8 +171,11 @@ public class LogedInUser implements Serializable {
     public String loginCheck() throws SQLException, ClassNotFoundException
     {
         if(loginValidation())
-        {
-            return "index";
+        {   
+            if (!isFirstLogin)
+                return "index";
+            else
+                return "firstUpdateInfo";
         }
         
         return null;
@@ -230,47 +231,21 @@ public class LogedInUser implements Serializable {
                 System.err.print(e.hashCode());
             }
         }
-            
     }
     
-    private void login(int userid, String password) throws SQLException{
-        String sql = "select * from logins where userID=? and Password=?";
-        String sql2 = "select * from users where userID=?";
-        Database db=null;
-        ResultSet rs=null;
-        
-        try{
-        db = new Database(sql);
-        PreparedStatement st = db.getSt();
-        st.setInt(1, userid);
-        st.setString(2, password);
-        rs = db.getSelect();
-        
-        if (rs.next()){
-            this.login = new Login(rs.getInt("UserID"), rs.getString("Email"), 
-                    rs.getInt("UserTypeCode"), rs.getInt("active"));
-            this.isLogin = true;
-            
-            db= new Database(sql2);
-            st = db.getSt();
-            st.setInt(1, this.login.getUserID());
-            rs = db.getSelect();
-            
-            if (rs.next())
-                this.user = new User(rs.getString("Name"),rs.getString("Surname"),
-                        rs.getString("Address"),rs.getString("Phone"),rs.getDate("Birday"),
-                        rs.getString("Gender"));
-
-        }
-        } catch (Exception e){
-            System.err.print(e.hashCode());
-        }finally {
-            if (rs!=null) rs.close();
-            if (db!=null) db.close();
+    public void isFirstLime() throws IOException {
+        if (this.isFirstLogin) {
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/firstUpdateInfo.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
         }
     }
     
-
+    
     public Login getLogin() {
         return login;
     }
