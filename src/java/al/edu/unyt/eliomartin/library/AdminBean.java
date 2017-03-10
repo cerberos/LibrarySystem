@@ -76,7 +76,7 @@ public class AdminBean {
         
         for(int i:id)
         {
-            db=new Database("Select email from logins where userTypeCode>0 and userid="+i);
+            db=new Database("Select email from logins where  userid="+i);
             rs=db.getSelect();
             if(rs.next())
             emails.add(rs.getString("email"));
