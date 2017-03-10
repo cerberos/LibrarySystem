@@ -328,13 +328,23 @@ public class LibrarianBean {
         db.getSt().setString(1, this.bookSubcategoryName);
         db.getSt().setInt(2, categoryid);
       
+        try
+        {
         if(db.update())
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subategory was created succesfully!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category was created succesfully!"));
         else
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subcategory creation failed!")); 
-             
-        db.close();
-        bookCategoryName1="";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+        catch(Exception e)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+             finally
+        {
+            db.close();
+            bookCategoryName1="";
+        }
+        
         
     }    
 
@@ -379,12 +389,21 @@ public class LibrarianBean {
         db=new Database("Insert into categories (name) values (?)");
         db.getSt().setString(1, bookCategoryName);
         
+        try
+        {
         if(db.update())
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category was created succesfully!"));
         else
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
-             
-        db.close();
+        }
+        catch(Exception e)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+             finally
+        {
+            db.close();
+        }
         
     }
         
