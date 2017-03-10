@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <h:head>
+        <title>View Book</title>
+        <h:outputStylesheet name="bootstrap.css" library="css"/>
+    </h:head>
+    <h:body>
+      <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
+      
+      <h:panelGrid columns="2">
+          
+          <h:panelGrid columns="2" styleClass="table table-bordered" style="width: 100%">
+                
+            <h:outputText value="ISBN : " />
+            <h:outputText value="#{bookBean.book.isbn}" />
+            
+            <h:outputText value="Title : " />
+            <h:outputText value="#{bookBean.book.title}" />
+            
+            <h:outputText value="Description : " />
+            <h:outputText value="#{bookBean.book.description}" />
+            
+            <h:outputText value="Subcategory Id : " />
+            <h:outputText value="#{bookBean.book.subcategoryID}" />
+            
+            <h:outputText value="Number of copies: " />
+            <h:outputText value="#{bookBean.book.numberOfCopies}" />
+            
+            <h:outputText value="Flaged : " />
+            <h:outputText value="#{bookBean.book.holdFlag}" />
+            
+            <h:outputText value="Edition nr. : " />
+            <h:outputText value="#{bookBean.book.editionNo}" />
+            
+            </h:panelGrid>
+          
+      
+          <h:form>
+          <h:panelGrid columns="2" styleClass="table" style="width: 100%">
+              
+              <h:commandButton disabled="#{bookBean.loan}" value="Loan this book" styleClass="btn btn-success  btn-lg" action="#{bookBean.loanBook()}">
+                  <f:param name="book" value="#{bookBean.book}" />
+                  <f:param name="login" value="#{logedInUser.login}" />
+              </h:commandButton>
+              
+              <h:selectOneMenu disabled="true" id="getUserID" value="#{bookBean.userid}">               
+                    <f:selectItems value="#{logedInUser.keepUserID}"/>
+                </h:selectOneMenu>
+              
+            <h:commandButton disabled="#{bookBean.putQueue}" value="Request this book" styleClass="btn btn-warning  btn-lg">
+                  <f:param name="book" value="#{bookBean.book}" />
+                  <f:param name="login" value="#{logedInUser.login}" />
+              </h:commandButton>
+              
+            <h:commandButton disabled="#{bookBean.hold}" value="Hold the book" styleClass="btn btn-dangers btn-lg">
+                  <f:param name="book" value="#{bookBean.book}" />
+                  <f:param name="login" value="#{logedInUser.login}" />
+              </h:commandButton>
+              
+            <h:commandButton disabled="#{bookBean.unhold}" value="UnHold the book" styleClass="btn btn-dangers btn-lg">
+                  <f:param name="book" value="#{bookBean.book}" />
+                  <f:param name="login" value="#{logedInUser.login}" />
+              </h:commandButton>
+              
+            <h:commandButton value="Go back" styleClass="btn btn-info btn-lg" 
+                                 action="index" /><div></div>
+                <h:outputText value="" />
+            
+          </h:panelGrid>
+          </h:form>
+          </h:panelGrid>
+      <blockquote>
+          <p><h:outputText escape="false" value="#{bookAvailability.message}" /></p>
+          <footer>System Message</footer>
+      </blockquote>
+    </h:body>
+</html>
+
+                  

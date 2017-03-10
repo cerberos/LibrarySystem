@@ -29,7 +29,8 @@ and open the template in the editor.
                 </h:inputText>
                 <h:message for="pass"/>
             </h:panelGrid>
+            <h:commandButton action="#{logedInUser.tryLogin()}"
+                             value="Login"></h:commandButton>
         </h:form>
-        <h1>Testing main page.</h1>
     </h:body>
 </html>
