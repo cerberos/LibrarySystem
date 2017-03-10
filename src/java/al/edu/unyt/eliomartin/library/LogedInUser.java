@@ -31,11 +31,24 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
+     private boolean isFirstLogin= false;
     
     private int loginid;
     private String loginpass;
     private String page;
     
+        public void isFirstLime() throws IOException {
+        if (this.isFirstLogin) {
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/firstUpdateInfo.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
+        }
+    }
+        
     public String page1()
     {
         return page;
@@ -78,6 +91,7 @@ public class LogedInUser implements Serializable {
         
         db.close();
     }
+    
     public Boolean loginValidation() throws SQLException, ClassNotFoundException
     {
         
@@ -89,7 +103,7 @@ public class LogedInUser implements Serializable {
         {
             
             login= new Login();
-            login.setUserID(rs.getInt("userid"));
+            login.setUserID(loginid);
             login.setEmail(rs.getString("email"));
             login.setActive(rs.getInt("active"));       
             login.setUserTypeCode(rs.getInt("UserTypeCode"));
@@ -101,18 +115,20 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
-                if(rs.next())
-                {
                 
-                user.setAddress(rs.getString("address"));
-                user.setBirthDate(rs.getDate("birthdate"));
-                user.setGender(rs.getString("gender"));
-                user.setName(rs.getString("name"));
-                user.setPhone(rs.getString("phone"));
-                user.setSurname(rs.getString("surname"));
-                return true;
+                if(rs.next()){
+                    user.setAddress(rs.getString("address"));
+                    user.setBirthDate(rs.getDate("birthdate"));
+                    user.setGender(rs.getString("gender"));
+                    user.setName(rs.getString("name"));
+                    user.setPhone(rs.getString("phone"));
+                    user.setSurname(rs.getString("surname"));
+
+                    return true;
+                } else {
+                    isFirstLogin = true;
                 }
-            return true;
+                return true;
             }
             else
             {
@@ -158,14 +174,6 @@ public class LogedInUser implements Serializable {
     {
         if(loginValidation())
         {
-//            if(login.getUserTypeCode()==0)
-//                return "admin_page";
-//            if(login.getUserTypeCode()==1)
-//                return "librarian_page";
-//            if(login.getUserTypeCode()==2)
-//                return "instructor_page";
-//            if(login.getUserTypeCode()==3)
-//                return "student_page"; 
             return "index";
         }
         
@@ -262,17 +270,6 @@ public class LogedInUser implements Serializable {
         }
     }
     
-    
-//    public void isActive(){
-//    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//        try {
-//            ec.redirect(ec.getRequestContextPath()
-//                    + "example.xhtml");
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            System.err.print(e.hashCode());
-//        }
-//    }
 
     public Login getLogin() {
         return login;
