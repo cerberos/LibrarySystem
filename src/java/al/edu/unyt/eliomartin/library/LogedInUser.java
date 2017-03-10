@@ -31,13 +31,13 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
-    private ArrayList<String> keepUserID= new ArrayList<String>();
+    private ArrayList<Integer> keepUserID= new ArrayList<Integer>();
 
-    public ArrayList<String> getKeepUserID() {
+    public ArrayList<Integer> getKeepUserID() {
         return keepUserID;
     }
 
-    public void setKeepUserID(ArrayList<String> keepUserID) {
+    public void setKeepUserID(ArrayList<Integer> keepUserID) {
         this.keepUserID = keepUserID;
     }
     private int loginid;
@@ -67,8 +67,9 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
+                keepUserID.clear();
                 if(rs.next()){
-                keepUserID.add(this.loginid + "");
+                keepUserID.add(loginid);
                 user.setAddress(rs.getString("address"));
                 user.setBirthDate(rs.getDate("birthdate"));
                 user.setGender(rs.getString("gender"));
