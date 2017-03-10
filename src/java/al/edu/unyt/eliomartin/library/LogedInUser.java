@@ -31,17 +31,9 @@ public class LogedInUser implements Serializable {
     private User user= new User();
     private String newPasswd;
     private Boolean isLogin=false;
-    private ArrayList<Integer> keepUserID= new ArrayList<Integer>();
-
-    public ArrayList<Integer> getKeepUserID() {
-        return keepUserID;
-    }
-
-    public void setKeepUserID(ArrayList<Integer> keepUserID) {
-        this.keepUserID = keepUserID;
-    }
     private int loginid;
     private String loginpass;
+    private boolean isFirstLogin= false;
     
     
     public Boolean loginValidation() throws SQLException, ClassNotFoundException
@@ -67,17 +59,18 @@ public class LogedInUser implements Serializable {
                 db=new Database("select * from users where userid=?");
                 db.getSt().setInt(1, login.getUserID());
                 rs=db.getSelect();
-                keepUserID.clear();
+                
                 if(rs.next()){
-                keepUserID.add(loginid);
-                user.setAddress(rs.getString("address"));
-                user.setBirthDate(rs.getDate("birthdate"));
-                user.setGender(rs.getString("gender"));
-                user.setName(rs.getString("name"));
-                user.setPhone(rs.getString("phone"));
-                user.setSurname(rs.getString("surname"));
-            
-                return true;
+                    user.setAddress(rs.getString("address"));
+                    user.setBirthDate(rs.getDate("birthdate"));
+                    user.setGender(rs.getString("gender"));
+                    user.setName(rs.getString("name"));
+                    user.setPhone(rs.getString("phone"));
+                    user.setSurname(rs.getString("surname"));
+
+                    return true;
+                } else {
+                    isFirstLogin = true;
                 }
                 return true;
             }
@@ -101,15 +94,11 @@ public class LogedInUser implements Serializable {
     public String loginCheck() throws SQLException, ClassNotFoundException
     {
         if(loginValidation())
-        {
-            if(login.getUserTypeCode()==0)
-                return "admin_page";
-            if(login.getUserTypeCode()==1)
-                return "librarian_page";
-            if(login.getUserTypeCode()==2)
-                return "instructor_page";
-            if(login.getUserTypeCode()==3)
-                return "student_page"; 
+        {   
+            if (!isFirstLogin)
+                return "index";
+            else
+                return "firstUpdateInfo";
         }
         
         return null;
@@ -138,58 +127,21 @@ public class LogedInUser implements Serializable {
                 System.err.print(e.hashCode());
             }
         }
-            
     }
     
-    private void login(int userid, String password) throws SQLException{
-        String sql = "select * from logins where userID=? and Password=?";
-        String sql2 = "select * from users where userID=?";
-        Database db=null;
-        ResultSet rs=null;
-        
-        try{
-        db = new Database(sql);
-        PreparedStatement st = db.getSt();
-        st.setInt(1, userid);
-        st.setString(2, password);
-        rs = db.getSelect();
-        
-        if (rs.next()){
-            this.login = new Login(rs.getInt("UserID"), rs.getString("Email"), 
-                    rs.getInt("UserTypeCode"), rs.getInt("active"));
-            this.isLogin = true;
-            
-            db= new Database(sql2);
-            st = db.getSt();
-            st.setInt(1, this.login.getUserID());
-            rs = db.getSelect();
-            
-            if (rs.next())
-                this.user = new User(rs.getString("Name"),rs.getString("Surname"),
-                        rs.getString("Address"),rs.getString("Phone"),rs.getDate("Birday"),
-                        rs.getString("Gender"));
-
-        }
-        } catch (Exception e){
-            System.err.print(e.hashCode());
-        }finally {
-            if (rs!=null) rs.close();
-            if (db!=null) db.close();
+    public void isFirstLime() throws IOException {
+        if (this.isFirstLogin) {
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/firstUpdateInfo.xhtml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.err.print(e.hashCode());
+            }
         }
     }
     
     
-//    public void isActive(){
-//    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//        try {
-//            ec.redirect(ec.getRequestContextPath()
-//                    + "example.xhtml");
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            System.err.print(e.hashCode());
-//        }
-//    }
-
     public Login getLogin() {
         return login;
     }

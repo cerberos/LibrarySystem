@@ -11,6 +11,7 @@
     </h:head>
     <h:body>
       <f:event type="preRenderView" listener="#{logedInUser.isLogin}" /> 
+      <f:event type="preRenderView" listener="#{logedInUser.isFirstLime()}" />
       
       <h:panelGrid columns="3">
       <h:form>
