@@ -140,6 +140,45 @@ public class AdminBean {
               
     }
     
+     public void updateBook() throws SQLException, ClassNotFoundException
+    {
+        
+        db=new Database("Select * from books where isbn=?");
+        db.getSt().setString(1, book.getIsbn());
+        
+        if(db.getSelect().next())
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This book already exists!"));
+            
+        db=new Database("UPDATE books SET Title=?, Description=? , SubcategoryID=? , NumberOfCopies=? , HoldFlag=?, EditionNo=? WHERE ISBN=?;");
+        book.setSubcategoryID(Integer.parseInt(bookSubcategoryName.substring(2, bookSubcategoryName.indexOf(":")).replaceAll("\\s","")));
+          
+        db.getSt().setString(7, book.getIsbn());
+        db.getSt().setString(1, book.getTitle());
+        db.getSt().setString(2, book.getDescription());
+        db.getSt().setInt(3, book.getSubcategoryID());
+        db.getSt().setInt(4, book.getNumberOfCopies());
+        db.getSt().setString(5, book.getHoldFlag());
+        db.getSt().setInt(6, book.getEditionNo()); 
+        
+        if(db.update())
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book was succesfully inserted!"));
+        else
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book insertion failed!"));
+        }
+        
+        else
+        {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("A book with this ISBN does not exist"));
+        db.close();
+            
+        }
+       
+        db.close();
+        bookSubcategoryName=""; 
+              
+    }
+    
         public void createUser () throws SQLException, ClassNotFoundException
     {
              int userTypeCode=Integer.parseInt(userType.substring(2, userType.indexOf(":")).replaceAll("\\s",""));    
@@ -176,13 +215,23 @@ public class AdminBean {
         db.getSt().setString(1, this.bookSubcategoryName);
         db.getSt().setInt(2, categoryid);
       
+        try
+        {
         if(db.update())
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subategory was created succesfully!"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category was created succesfully!"));
         else
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Subcategory creation failed!")); 
-             
-        db.close();
-        bookCategoryName1="";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+        catch(Exception e)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+             finally
+        {
+            db.close();
+            bookCategoryName1="";
+        }
+        
         
     }    
 
@@ -227,12 +276,22 @@ public class AdminBean {
         db=new Database("Insert into categories (name) values (?)");
         db.getSt().setString(1, bookCategoryName);
         
+        try
+        {
         if(db.update())
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category was created succesfully!"));
         else
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
-             
-        db.close();
+        }
+        catch(Exception e)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Book Category creation failed!")); 
+        }
+             finally
+        {
+            db.close();
+        }
+        
         
     }
         

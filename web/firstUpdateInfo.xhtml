@@ -80,7 +80,13 @@ and open the template in the editor.
         </h:form>
         
         <h:outputText escape="false" value="#{firstUpdateInfoBean.text}" />
-        <h:outputLink value="index.xhtml">Go to index</h:outputLink>
+        
+        <h:form>
+        <h:panelGrid columns="2">
+        <h:outputText escape="false" value="After updtating your personal information please login again." />
+        <h:commandButton  action="#{logedInUser.logout()}" value="Login" />
+        </h:panelGrid>
+        </h:form>
         
     </h:body>
 </html>

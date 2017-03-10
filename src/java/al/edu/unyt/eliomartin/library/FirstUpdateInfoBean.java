@@ -85,7 +85,5 @@ public class FirstUpdateInfoBean implements Serializable {
     public void setText(String text) {
         this.text = text;
     }
-    
-    
-    
+
 }

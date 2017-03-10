@@ -13,9 +13,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -27,6 +29,7 @@ public class ViewEditLoansBean {
     
     private ArrayList<Loans_history> loans_history= new ArrayList();
     private Map<String,String> loaned_list = new LinkedHashMap<String,String>();
+    private int counter = 0;
     
     private String bookIsbn;
     private String message = "";
@@ -49,15 +52,21 @@ public class ViewEditLoansBean {
             rs= db.getSelect() ;
             
             if (!rs.next()){
-                this.message += "Tere is no book that will expire soon.";
+                this.message = "There is no book that will expire soon.";
             } else {
                 rs.beforeFirst();
             }
             
             while(rs.next()) {
-		if (DifferenceInDays(new java.sql.Date(new Date().getTime()),rs.getDate("deadline")) < 1 )
+		if (DifferenceInDays(new java.sql.Date(new Date().getTime()),rs.getDate("deadline")) < 1 ){
                     this.message += "The book with isbn: <b>"+ rs.getString("isbn") + "</b> will expire today in midknight. <br/>";
+                counter++;
+                }
             }
+            
+            if (counter == 0)
+                this.message = "There is no book that will expire soon.";
+            
         } finally {
             if (rs != null) rs.close();
             if (db != null) db.close();
@@ -115,14 +124,16 @@ public class ViewEditLoansBean {
     
     
     public  void returnBook() throws SQLException, ClassNotFoundException {
+        
         String sql = "update loans_history set datereturned=?, feepaid=? where userid=? and isbn=? and datereturned is NULL";
         Database db = null ;
         ResultSet rs = null;
+        
+        try{
         java.sql.Date d = new java.sql.Date(new Date().getTime());
         Loans_history lh = new Loans_history(login.getUserID(), bookIsbn);
         float fee = 0;
         int res= DifferenceInDays(lh.getDateLoaned(), d);
-        
         if (res <= 3)
             fee = (float)(bookTotalFee * 0.1);
         else if (res>3) {
@@ -131,25 +142,24 @@ public class ViewEditLoansBean {
         } else 
             fee = 0;
                 
-                
-                try{
-            db = new Database(sql);
-            db.getSt().setDate(1, d);
-            db.getSt().setFloat(2, fee);
-            db.getSt().setInt(3, login.getUserID());
-            db.getSt().setString(4, bookIsbn);
-            if (db.update()){
-                this.message += "You returned succesfuly your book.";
-            } else {
-                this.message += "There was a problem and your book wasn't returned.";
-            }
-            
-            
-            
-        } finally {
-            if (rs != null) rs.close();
-            if (db != null) db.close();
-        }
+                    db = new Database(sql);
+                    db.getSt().setDate(1, d);
+                    db.getSt().setFloat(2, fee);
+                    db.getSt().setInt(3, login.getUserID());
+                    db.getSt().setString(4, bookIsbn);
+                    if (db.update()){
+                        this.message += "You returned succesfuly your book.";
+                    } else {
+                        this.message += "There was a problem and your book wasn't returned.";
+                    }
+                } catch (NullPointerException e){
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("There is no book selected."));
+                } catch (Exception e){
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+                }finally {
+                    if (rs != null) rs.close();
+                    if (db != null) db.close();
+                }
     }
     
     public static int DifferenceInDays(java.sql.Date from, java.sql.Date to) {

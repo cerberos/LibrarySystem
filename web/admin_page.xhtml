@@ -9,11 +9,13 @@
         <h:outputStylesheet name="bootstrap.css" library="css"/>
     </h:head>
     <h:body>
+   
         <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
-        <f:event type="preRenderView" listener="#{logedInUser.isAdmin}" />
+        <f:event type="preRenderView" listener="#{logedInUser.isAdmin}" />  
+        <h:outputLink value="index.xhtml">Go back to Index...</h:outputLink> 
         
         <h:form>
-        <h:outputLink value="index.xhtml">Go back to Index...</h:outputLink> 
+
         <h1>Welcome Administrator #{logedInUser.user.name} </h1>
 
         <h2>Create User</h2>
@@ -38,8 +40,10 @@
              <f:ajax execute="inputUserPassword selectUserType userEmail" render="inputUserPassword selectUserType inputUserPasswordMessage userEmailMessage userCreationStatus"/>
         </h:commandButton>
        
-        
-        
+    
+
+               
+
         <h2>Create Book Category</h2>
         <h:messages id="categoryCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
@@ -51,8 +55,8 @@
         <h:commandButton value="Create Category" action="#{adminBean.createBookCategory}">
              <f:ajax execute="inputCategoryName" render="inputCategoryNameMessage categoryCreationStatus inputCategoryName"/>
         </h:commandButton>
-        
-        
+
+
         <h2>Create Book Subcategory</h2>
         <h:messages id="subcategoryCreationStatus" styleClass="error" />
         <h:panelGrid columns="3">
@@ -161,9 +165,10 @@
              <f:ajax execute="newPassword repeatPassword" render="changePasswordStatus newPasswordMessage repeatPasswordMessage"/>
         </h:commandButton>
         <p/>
-        </h:form>
+      
          
-        
+      </h:form>
+   
         
     </h:body>
 </html>

@@ -45,15 +45,14 @@
             </h:selectOneMenu>
             <h:commandButton value="Return Selected Book" styleClass="btn btn-warning" action="#{viewEditLoansBean.returnBook()}" />
             <h:commandButton value="Check for Expiration" styleClass="btn btn-warning" action="#{viewEditLoansBean.checkForExpiration()}" />
-                    
+            <h:commandButton value="Go to index" styleClass="btn btn-info " action="index" /><div></div>
             </h:panelGrid>
         </h:form>
           </h:panelGrid>
       <blockquote>
-          <p><h:outputText escape="false" value="#{viewEditLoansBean.message}" /></p>
+          <p><h:outputText escape="false" value="#{viewEditLoansBean.message}" />
+          <h:messages id="userCreationStatus"  styleClass="error"/></p>
           <footer>System Message</footer>
       </blockquote>
     </h:body>
 </html>
-
-                  

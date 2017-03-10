@@ -32,6 +32,7 @@ public class LogedInUser implements Serializable {
     private String newPasswd;
     private Boolean isLogin=false;
     private int loginid;
+    private String page;
     private String loginpass;
     private boolean isFirstLogin= false;
     
@@ -160,10 +161,11 @@ public class LogedInUser implements Serializable {
             pages.add("librarian_page");
         }
         
-         if(login.getUserTypeCode()==2 || login.getUserTypeCode()==2 )
+         if(login.getUserTypeCode()==2 || login.getUserTypeCode()==3 )
         {
 
             pages.add("view_profile");
+            pages.add("viewEditLoans");
         }
         return pages;
     }
@@ -233,17 +235,7 @@ public class LogedInUser implements Serializable {
         }
     }
     
-    public void isFirstLime() throws IOException {
-        if (this.isFirstLogin) {
-            try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/firstUpdateInfo.xhtml");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                System.err.print(e.hashCode());
-            }
-        }
-    }
+
     
     
     public Login getLogin() {

@@ -10,7 +10,6 @@
     </h:head>
     <h:body>
         <f:event type="preRenderView" listener="#{logedInUser.isLogin}" />
-        <f:event type="preRenderView" listener="#{logedInUser.isLibrarian}" />
          <h:outputLink value="librarian_page.xhtml">Go back...</h:outputLink>
         <h1>Profile Page of  #{logedInUser.user.name} </h1>
          <p/>
